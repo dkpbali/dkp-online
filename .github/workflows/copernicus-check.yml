@@ -1,0 +1,42 @@
+name: Copernicus Marine Red Tide Anomaly Check
+
+on:
+  schedule:
+    # Run once daily at 06:15 UTC (14:15 WITA), when daily NRT Ocean Colour data is typically ready
+    - cron: '15 6 * * *'
+  workflow_dispatch:
+    # Allows manual trigger from GitHub UI for testing
+
+jobs:
+  check-anomaly:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install copernicusmarine gspread google-auth numpy pandas xarray netCDF4
+
+      - name: Run Red Tide Anomaly Check
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUS_USERNAME }}
+          COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUS_PASSWORD }}
+        run: |
+          python scripts/copernicus_redtide/check_anomaly.py
+
+      - name: Run Coral Bleaching Anomaly Check
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUS_USERNAME }}
+          COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUS_PASSWORD }}
+        run: |
+          python scripts/copernicus_redtide/check_bleaching_anomaly.py
