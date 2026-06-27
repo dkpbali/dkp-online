@@ -425,8 +425,8 @@ main{max-width:520px;margin:0 auto;padding:20px 16px 100px}
 .berita-btn:hover{border-color:var(--wave);color:var(--wave);box-shadow:0 2px 6px rgba(0,85,170,0.06);}
 
 /* Group divider inside table */
-.berita-group-header{padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;background:var(--ink2);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,85,170,0.04);transition:box-shadow .2s,transform .2s;}
-.berita-group-header:hover{box-shadow:0 4px 12px rgba(0,85,170,0.06);transform:translateY(-1px);}
+.berita-group-header{padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.15);border-radius:14px;box-shadow:0 2px 6px rgba(220,38,38,0.04);transition:box-shadow .2s,transform .2s;}
+.berita-group-header:hover{box-shadow:0 4px 12px rgba(220,38,38,0.08);transform:translateY(-1px);}
 .berita-group-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);font-family:var(--mono);flex:1;min-width:0;}
 .berita-group-count{font-size:9px;font-weight:700;font-family:var(--mono);background:var(--ink3);color:var(--muted);padding:1px 7px;border-radius:3px;flex-shrink:0;}
 .berita-group-rec-btn{font-size:10px;font-weight:700;font-family:var(--sans);padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:var(--ink);color:var(--muted);cursor:pointer;transition:all .15s;flex-shrink:0;}
@@ -906,13 +906,12 @@ body.keyboard-open .more-drawer{display:none !important}
 .heatmap-box {
   flex: 1;
   height: 28px;
-  max-width: 28px;
   border-radius: 6px;
   cursor: pointer;
   transition: transform 0.15s ease;
 }
 .heatmap-box:hover {
-  transform: scale(1.15);
+  transform: scale(1.05);
 }
 
 .heatmap-wrapper {
