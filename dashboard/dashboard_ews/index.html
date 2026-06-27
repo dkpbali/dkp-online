@@ -427,7 +427,7 @@ main{max-width:520px;margin:0 auto;padding:20px 16px 100px}
 /* Group divider inside table */
 .berita-group-header{padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;background:var(--ink2);border:1px solid var(--border);border-radius:14px;box-shadow:0 2px 6px rgba(0,85,170,0.04);transition:box-shadow .2s,transform .2s;}
 .berita-group-header:hover{box-shadow:0 4px 12px rgba(0,85,170,0.06);transform:translateY(-1px);}
-.berita-group-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text);font-family:var(--mono);flex:1;min-width:0;}
+.berita-group-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--red);font-family:var(--mono);flex:1;min-width:0;}
 .berita-group-count{font-size:9px;font-weight:700;font-family:var(--mono);background:var(--ink3);color:var(--muted);padding:1px 7px;border-radius:3px;flex-shrink:0;}
 .berita-group-rec-btn{font-size:10px;font-weight:700;font-family:var(--sans);padding:4px 11px;border-radius:5px;border:1px solid var(--border);background:var(--ink);color:var(--muted);cursor:pointer;transition:all .15s;flex-shrink:0;}
 .berita-group-rec-btn:hover{border-color:var(--wave);color:var(--wave);box-shadow:0 2px 6px rgba(0,85,170,0.06);}
@@ -2166,8 +2166,9 @@ function generateHeatmapHtml(alerts, type) {
   const today = new Date();
   let normalCount = 0;
   let boxesHtml = "";
+  const DAYS = 14;
   
-  for (let i = 6; i >= 0; i--) {
+  for (let i = DAYS - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     
@@ -2232,12 +2233,12 @@ function generateHeatmapHtml(alerts, type) {
     `;
   }
   
-  const pct = ((normalCount / 7) * 100).toFixed(0);
+  const pct = ((normalCount / DAYS) * 100).toFixed(0);
   
   return `
     <div style="margin-top:12px; padding:12px 14px; background:var(--ink2); border:1px solid var(--border); border-radius:14px; width: 100%;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <span style="font-size:10.5px; font-weight:700; color:var(--muted); font-family:var(--sans); text-transform:uppercase; letter-spacing:0.05em;">Riwayat 7 Hari Terakhir</span>
+        <span style="font-size:10.5px; font-weight:700; color:var(--muted); font-family:var(--sans); text-transform:uppercase; letter-spacing:0.05em;">Riwayat 14 Hari Terakhir</span>
         <span style="font-size:10px; font-weight:700; color:${pct === '100' ? 'var(--green)' : 'var(--yellow)'}; font-family:var(--mono);">${pct}% Aman</span>
       </div>
       
@@ -2247,7 +2248,7 @@ function generateHeatmapHtml(alerts, type) {
           ${boxesHtml}
         </div>
         <div style="display:flex; justify-content:space-between; align-items:center; font-size:9px; color:var(--muted); font-family:var(--sans); margin-top:6px; font-weight:500;">
-          <span>7 hari lalu</span>
+          <span>14 hari lalu</span>
           <div style="display:flex; gap:8px; align-items:center;">
             <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:6px; height:6px; border-radius:1.5px; background:var(--green);"></span>Aman</span>
             <span style="display:inline-flex; align-items:center; gap:4px;"><span style="display:inline-block; width:6px; height:6px; border-radius:1.5px; background:var(--yellow);"></span>Waspada</span>
