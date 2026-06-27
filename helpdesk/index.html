@@ -205,7 +205,6 @@ main{max-width:560px;margin:0 auto;padding:20px 16px 100px}
 .btn-submit:hover{opacity:.9}
 .btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:1}
 
-/* SUCCESS */
 #success-screen{
   display:none;flex-direction:column;
   align-items:center;text-align:center;
@@ -620,9 +619,7 @@ body.keyboard-open .more-drawer {
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tab-form" onclick="switchTab('form')">Buat Laporan</div>
-    <div class="tab" id="tab-status" onclick="switchTab('status')">Status Tiket</div>
+  
   </div>
 
 
@@ -636,7 +633,7 @@ body.keyboard-open .more-drawer {
       <p>Tim IT DKP Bali sudah diberitahu.<br/>Simpan nomor tiket Anda:</p>
       <div class="tiket-badge" id="result-tiket-id">TKT-0000</div>
       <p style="font-size:11px;color:var(--muted)">
-        Gunakan nomor ini untuk cek status di tab "Status Tiket".
+        Nomor tiket ini dikirim ke admin via Telegram. Pantau status di Beranda.
       </p>
       <button class="btn-new" onclick="resetForm()">+ Laporan Baru</button>
     </div>
@@ -720,20 +717,7 @@ body.keyboard-open .more-drawer {
     </form>
   </div>
 
-  <!-- ══ TAB STATUS ══ -->
-  <div id="section-status" class="section">
-    <div class="search-box field">
-      <label>Cari tiket</label>
-      <input type="text" id="search-tiket"
-             placeholder="Nama, ID tiket, atau judul masalah..."
-             oninput="filterTiket()"/>
-    </div>
-    <div id="tiket-list">
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-    </div>
-  </div>
+
 
 </main>
 
@@ -798,24 +782,18 @@ const CFG = {
 };
 
 // ── State ───────────────────────────────────
-let allPegawai = [];
-let allAset    = [];
-let allTiket   = [];
-let fotoB64    = null;
-let hasFoto    = false;
+let allPegawai   = [];
+let allAset      = [];
+let fotoB64      = null;
+let hasFoto      = false;
+
 
 // ── Tabs ────────────────────────────────────
 function switchTab(tab) {
-  ["form","status"].forEach(t => {
-    document.getElementById(`section-${t}`).classList.toggle("active", t === tab);
-    document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
+  ["form"].forEach(t => {
+    document.getElementById(`section-${t}`)?.classList.toggle("active", t === tab);
+    document.getElementById(`tab-${t}`)?.classList.toggle("active", t === tab);
   });
-  if (tab === "status") loadTiket();
-
-  // Persist tab to URL
-  const url = new URL(window.location);
-  url.searchParams.set("tab", tab);
-  window.history.replaceState({}, "", url);
 }
 
 // ── Load Pegawai ────────────────────────────
@@ -989,8 +967,11 @@ async function submitLaporan(e) {
   const peg    = allPegawai.find(p => p.id === pegId);
   const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
 
+
+
   const payload = {
     action:         "submitHelpdesk",
+    
     id_pelapor:     pegId,
     nama_pelapor:   peg?.nama    || "",
     lokasi_pelapor:  peg?.lokasiKerja  || peg?.bidang || "",
@@ -1182,6 +1163,8 @@ if (tabParam === "status") {
 (async () => {
   await Promise.all([loadPegawai(), loadAset()]);
   checkAsetParam();
+
+
 })();
 
 // Keyboard visual viewport handler

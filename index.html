@@ -9,6 +9,7 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>ARUNIWAVES</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root {
   --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
@@ -793,6 +794,74 @@ main { padding-bottom: 40px !important; }
     padding: 6px 12px !important;
   }
 }
+
+/* ── Google Login Bar ── */
+#login-bar{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#0055AA,#0077E6);border-radius:14px;padding:14px 16px;margin-bottom:16px;}
+#login-bar .login-bar-icon{font-size:24px;flex-shrink:0;}
+#login-bar .login-bar-text{flex:1;}
+#login-bar .login-bar-title{color:#fff;font-weight:700;font-size:14px;margin-bottom:2px;}
+#login-bar .login-bar-sub{color:rgba(255,255,255,0.8);font-size:12px;line-height:1.4;}
+#gis-btn-container{flex-shrink:0;}
+#gis-btn-container>div{border-radius:8px!important;overflow:hidden;}
+#user-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
+#user-bar .user-name{font-weight:600;font-size:13px;color:var(--ink);}
+#user-bar .user-email{font-size:11px;color:var(--muted);}
+.btn-logout{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;}
+.btn-logout:hover{border-color:var(--red);color:var(--red);}
+
+/* ── Tabs for Aktivitas Terkini ── */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:16px;gap:8px;}
+.tab{padding:8px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--wave);border-bottom-color:var(--wave);}
+
+/* ── Modals ── */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:1000;align-items:center;justify-content:center;padding:16px;}
+.modal-content-card{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:500px;padding:20px;position:relative;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);max-height:90vh;overflow-y:auto;}
+.modal-close-btn{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+.modal-close-btn:hover{color:var(--red);}
+.modal-header-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px;}
+.modal-summary-card{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;line-height:1.5;color:var(--text);}
+
+/* ── File Upload ── */
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.upload-card{background:var(--light);border:1px dashed var(--border);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;position:relative;}
+.upload-card:hover{border-color:var(--wave);}
+.upload-title{font-size:10px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.upload-limit{font-size:8px;color:var(--muted);}
+.upload-input{display:none;}
+.file-preview{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:var(--card);border-radius:10px;padding:8px;align-items:center;justify-content:center;flex-direction:column;}
+.preview-remove{position:absolute;top:4px;right:4px;background:var(--red);color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.preview-thumb{max-height:100%;max-width:100%;object-fit:contain;border-radius:4px;}
+.preview-name{font-size:8px;color:var(--text);word-break:break-all;}
+
+/* Action Buttons */
+.act-actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.act-btn{font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);transition:all .2s;}
+.act-btn:hover{background:var(--light);border-color:var(--border2);}
+.act-btn-primary{background:var(--wave);color:#fff;border-color:transparent;}
+.act-btn-primary:hover{background:var(--sea);color:#fff;}
+.act-btn-danger{background:var(--red);color:#fff;border-color:transparent;}
+.act-btn-danger:hover{opacity:.9;}
+.act-btn-success{background:var(--green);color:#fff;border-color:transparent;}
+.act-btn-success:hover{opacity:.9;}
+
+.form-control {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--light);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: var(--sans);
+  transition: all 0.2s ease;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--wave);
+  background: var(--card);
+}
 </style>
 </head>
 <body>
@@ -969,7 +1038,33 @@ main { padding-bottom: 40px !important; }
         </div>
       </div>
 
-      <div class="section-title">Aktivitas Terkini</div>
+      
+      <!-- Google Login Bar -->
+      <div id="login-bar">
+        <div class="login-bar-icon">🔐</div>
+        <div class="login-bar-text">
+          <div class="login-bar-title">Login diperlukan</div>
+          <div class="login-bar-sub">Login dengan Gmail DKP untuk mengelola laporan</div>
+        </div>
+        <div id="gis-btn-container"></div>
+      </div>
+      <div id="user-bar">
+        <div>
+          <div class="user-name" id="user-name">-</div>
+          <div class="user-email" id="user-email">-</div>
+        </div>
+        <button class="btn-logout" onclick="logoutUser()">Keluar</button>
+      </div>
+
+      <div class="section-title" style="margin-top:20px;">Aktivitas Terkini</div>
+      
+      <!-- Tabs for Aktivitas Terkini -->
+      <div class="tabs" style="margin-bottom:12px; display: flex; gap: 8px;">
+        <div class="tab active" id="tab-act-helpdesk" onclick="switchActTab('helpdesk')" style="flex:1; text-align:center; padding:8px; font-size:12px;">Helpdesk</div>
+        <div class="tab" id="tab-act-humas" onclick="switchActTab('humas')" style="flex:1; text-align:center; padding:8px; font-size:12px;">Humas</div>
+        <div class="tab" id="tab-act-bbm" onclick="switchActTab('bbm')" style="flex:1; text-align:center; padding:8px; font-size:12px;">BBM</div>
+      </div>
+
       <div class="activity-list" id="activity-list">
         <div class="activity-item">
           <div class="act-dot dot-helpdesk"></div>
@@ -1013,12 +1108,157 @@ const CFG = {
   APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec"
 };
 
+// ── GIS & User State ────────────────────────
+const GIS_CLIENT_ID = "732031487810-5drciq7lali81tomok6l9s5370p7obvf.apps.googleusercontent.com";
+let currentUser = null; // { email, name, id_token, id_pegawai, is_admin, ... }
+
+// ── Aktivitas Terkini State ──────────────────
+let actHelpdesk   = [];
+let actHumas      = [];
+let actBbm        = [];
+let currentActTab = 'helpdesk';
+
+// ── File Upload State ────────────────────────
+let filesData = {
+  geotag:  { base64: null, name: "" },
+  surat:   { base64: null, name: "" },
+  laporan: { base64: null, name: "" },
+  nota:    { base64: null, name: "" }
+};
+
 function escHtml(str) {
   const d = document.createElement('div');
   d.textContent = str || '';
   return d.innerHTML;
 }
 
+// ── Google Sign-In (GIS) ─────────────────────
+function initGIS() {
+  google.accounts.id.initialize({
+    client_id: GIS_CLIENT_ID,
+    callback: onGoogleLogin,
+    auto_select: false,
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('gis-btn-container'),
+    { theme: 'filled_white', size: 'medium', text: 'signin_with', shape: 'rectangular' }
+  );
+  
+  // Check session storage
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) {
+    currentUser = JSON.parse(cached);
+    showUserBar();
+  }
+}
+
+async function onGoogleLogin(response) {
+  const idToken = response.credential;
+  try {
+    document.getElementById('login-bar').style.opacity = '0.6';
+    const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=checkUserByToken&id_token=${encodeURIComponent(idToken)}`);
+    const data = await res.json();
+    if (!data.success || !data.found) {
+      alert('Email Gmail Anda tidak terdaftar sebagai pegawai DKP. Hubungi admin.\n\nEmail: ' + (data.email || '-'));
+      document.getElementById('login-bar').style.opacity = '1';
+      return;
+    }
+    currentUser = { 
+      email: data.email, 
+      name: data.nama, 
+      id_token: idToken,
+      id_pegawai: data.id_pegawai, 
+      bidang: data.bidang, 
+      lokasi_kerja: data.lokasi_kerja,
+      is_admin: data.is_admin || false
+    };
+    // Save to session storage
+    sessionStorage.setItem("aruniwaves_user", JSON.stringify(currentUser));
+    showUserBar();
+  } catch (err) {
+    alert('Gagal verifikasi login. Coba lagi.');
+    document.getElementById('login-bar').style.opacity = '1';
+  }
+}
+
+function showUserBar() {
+  document.getElementById('login-bar').style.display = 'none';
+  document.getElementById('user-bar').style.display = 'flex';
+  document.getElementById('user-name').textContent  = currentUser.name + (currentUser.is_admin ? " (Admin IT)" : " (Pegawai)");
+  document.getElementById('user-email').textContent = currentUser.email;
+  
+  // Refresh activities rendering to show actions
+  renderActTab(currentActTab);
+}
+
+function logoutUser() {
+  currentUser = null;
+  sessionStorage.removeItem("aruniwaves_user");
+  google.accounts.id.disableAutoSelect();
+  document.getElementById('login-bar').style.display = 'flex';
+  document.getElementById('login-bar').style.opacity = '1';
+  document.getElementById('user-bar').style.display = 'none';
+  
+  // Refresh activities
+  renderActTab(currentActTab);
+}
+
+// ── Modals open/close ────────────────────────
+function openModal(id) {
+  document.getElementById(id).style.display = 'flex';
+}
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
+// ── File Upload Helpers ──────────────────────
+function triggerUpload(id) {
+  document.getElementById(id).click();
+}
+
+function handleRepFileSelect(e, type, mimeType, maxSize) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (mimeType === 'pdf' && file.type !== 'application/pdf') {
+    alert('Format file harus PDF.');
+    e.target.value = '';
+    return;
+  }
+  if (mimeType === 'image' && !file.type.startsWith('image/')) {
+    alert('Format file harus Gambar.');
+    e.target.value = '';
+    return;
+  }
+  if (file.size > maxSize * 1024 * 1024) {
+    alert(`Ukuran file maksimal ${maxSize}MB.`);
+    e.target.value = '';
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = ev => {
+    filesData[type].base64 = ev.target.result;
+    filesData[type].name = file.name;
+    
+    document.getElementById(`prev-rep-${type}`).style.display = 'flex';
+    if (type === 'geotag' || type === 'nota') {
+      document.getElementById(`thumb-rep-${type}`).src = ev.target.result;
+    } else {
+      document.getElementById(`name-rep-${type}`).textContent = file.name;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearRepFile(type) {
+  filesData[type].base64 = null;
+  filesData[type].name = "";
+  document.getElementById(`prev-rep-${type}`).style.display = 'none';
+  document.getElementById(`f-rep-${type}`).value = '';
+  if (type === 'geotag' || type === 'nota') {
+    document.getElementById(`thumb-rep-${type}`).src = '';
+  }
+}
 // ── PWA Install ─────────────────────────────
 let deferredPrompt = null;
 
@@ -1128,7 +1368,6 @@ function formatShortDate(dateStr) {
 // ── Load Stats ──────────────────────────────
 async function loadStats() {
   let rData = { success: false, helpdesk: [], booking: [], aset: [], bbm: [] };
-
   try {
     const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHomepageData`);
     rData = await res.json();
@@ -1141,37 +1380,16 @@ async function loadStats() {
     const asData = rData.aset || [];
     const bbmData = rData.bbm || [];
 
-    const tiketOpen      = success ? hdData.filter(t => t.status === "OPEN").length : 0;
-    const bookingPending = success ? bkData.filter(b => b.status === "PENDING").length : 0;
+    const tiketOpen      = success ? hdData.filter(t => t.status.toUpperCase() === "OPEN").length : 0;
+    const bookingPending = success ? bkData.filter(b => b.status.toUpperCase() === "OPEN").length : 0;
     const totalAset      = success ? asData.length : 0;
-    const bbmPending     = success ? bbmData.filter(b => !b.jumlah || parseFloat(b.jumlah) === 0).length : 0;
+    const bbmPending     = success ? bbmData.filter(b => b.status.toUpperCase() === "OPEN").length : 0;
 
     updateStats({ aset: totalAset, tiketOpen, bookingPending, bbmPending });
-    
-    // Initialize the calendar widget with booking data
     initHomepageCalendar(success ? bkData : []);
-
-    const activities = [];
-    if (success) {
-      hdData.slice(0, 2).forEach(t => activities.push({
-        type:  "helpdesk",
-        title: t.judul || "-",
-        meta:  t.nama || "Pelapor",
-        time:  formatShortDate(t.tanggal),
-      }));
-      bkData.slice(0, 2).forEach(b => activities.push({
-        type:  "booking",
-        title: `${b.acara || b.keterangan || "-"}`,
-        meta:  `${b.pemohon || "Pemohon"} · ${(b.ruangan || "").replace("RUANG RAPAT ","").replace("RUANG ","")}`,
-        time:  formatShortDate(b.tanggal + (b.mulai ? " " + b.mulai : "")),
-      }));
-    }
-    renderActivity(activities.slice(0, 5));
-
   } catch (err) {
     console.error("loadStats processing error:", err);
     updateStats({ aset: 0, tiketOpen: 0, bookingPending: 0, bbmPending: 0 });
-    renderActivity([]);
     initHomepageCalendar([]);
   }
 }
@@ -1184,28 +1402,349 @@ function updateStats({ aset, tiketOpen, bookingPending, bbmPending }) {
   document.getElementById("badge-bbm").textContent       = bbmPending > 0 ? `${bbmPending} pending` : "Semua clear";
 }
 
-function renderActivity(list) {
-  const dotMap = {
-    helpdesk: "dot-helpdesk", booking: "dot-booking",
-    humas:    "dot-humas",    aset:    "dot-aset",
-  };
-  document.getElementById("activity-list").innerHTML = list.length
-    ? list.map(a => `
-        <div class="activity-item">
-          <div class="act-dot ${dotMap[a.type] || "dot-aset"}"></div>
-          <div class="act-content">
-            <div class="act-title">${escHtml(a.title)}</div>
-            <div class="act-meta">${escHtml(a.meta)}</div>
-          </div>
-          <div class="act-time">${escHtml(a.time)}</div>
-        </div>`).join("")
-    : '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Belum ada aktivitas terkini.</div>';
+// ── 3-Tab Aktivitas Terkini ───────────────────
+function switchActTab(tab) {
+  currentActTab = tab;
+  ['helpdesk', 'humas', 'bbm'].forEach(t => {
+    const el = document.getElementById(`tab-act-${t}`);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  renderActTab(tab);
 }
 
-// ── More drawer ─────────────────────────────
+async function loadAktivitasTerkini() {
+  const listEl = document.getElementById("activity-list");
+  if (!listEl.innerHTML || listEl.innerHTML.includes('shimmer')) {
+    listEl.innerHTML = Array(3).fill().map(() => `
+      <div class="activity-item">
+        <div class="act-dot dot-helpdesk"></div>
+        <div class="act-content">
+          <div class="shimmer" style="height:14px;width:70%;margin-bottom:6px"></div>
+          <div class="shimmer" style="height:11px;width:40%"></div>
+        </div>
+      </div>`).join('');
+  }
 
-// ── Homepage Calendar ────────────────────────
-// ── Homepage Calendar (Weekly Date Strip) ─────
+  try {
+    const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getAktivitasTerkini`);
+    const json = await res.json();
+    if (json.success) {
+      actHelpdesk = json.helpdesk || [];
+      actHumas = json.humas || [];
+      actBbm = json.bbm || [];
+      renderActTab(currentActTab);
+    }
+  } catch(e) { 
+    console.error("Aktivitas Terkini load error:", e);
+    listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--red);font-size:13px">Gagal memuat aktivitas terkini.</div>';
+  }
+}
+
+function renderActTab(tab) {
+  const listEl = document.getElementById("activity-list");
+  let htmlStr = '';
+
+  const isUserLogged = !!currentUser;
+  const loggedEmail = isUserLogged ? currentUser.email.toLowerCase() : '';
+  const loggedPegId = isUserLogged ? currentUser.id_pegawai : '';
+  const isLoggedAdmin = isUserLogged ? currentUser.is_admin : false;
+
+  if (tab === 'helpdesk') {
+    if (!actHelpdesk.length) {
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan helpdesk yang belum tertangani.</div>';
+      return;
+    }
+    htmlStr = actHelpdesk.map(t => {
+      const isOwner = isUserLogged && (loggedPegId === t.idPelapor);
+      const isStatusOpen = t.status.toUpperCase() === 'OPEN';
+      const isStatusApproved = t.status.toUpperCase() === 'DISETUJUI';
+      
+      let actions = '';
+      if (isUserLogged) {
+        if (isLoggedAdmin) {
+          if (isStatusOpen) {
+            actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valHelpdesk('${t.id}')">Validasi</button></div>`;
+          } else if (isStatusApproved) {
+            actions = `<div class="act-actions"><button class="act-btn act-btn-primary" onclick="selesaiHelpdesk('${t.id}')">Selesai</button></div>`;
+          }
+        } else if (isOwner && isStatusOpen) {
+          actions = `<div class="act-actions">
+            <button class="act-btn" onclick="editHelpdesk('${t.id}', '${escHtml(t.judul)}', '${escHtml(t.deskripsi)}')">Edit</button>
+            <button class="act-btn act-btn-danger" onclick="deleteHelpdesk('${t.id}')">Hapus</button>
+          </div>`;
+        }
+      }
+
+      const badgeColor = isStatusOpen ? 'var(--orange)' : 'var(--wave)';
+      const statusLabel = isStatusOpen ? 'BARU' : (isStatusApproved ? 'DISETUJUI' : t.status);
+
+      return `
+        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
+          <div style="display:flex; width:100%; align-items:center; gap:8px;">
+            <div class="act-dot" style="background:${badgeColor}"></div>
+            <div class="act-content">
+              <div class="act-title">${escHtml(t.judul)}</div>
+              <div class="act-meta">${escHtml(t.nama)} · ${escHtml(t.bidang)} · <span style="font-weight:700;color:${badgeColor}">${statusLabel}</span></div>
+            </div>
+            <div class="act-time">${formatShortDate(t.tanggal)}</div>
+          </div>
+          ${actions}
+        </div>`;
+    }).join('');
+  } 
+  
+  else if (tab === 'humas') {
+    if (!actHumas.length) {
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan humas yang perlu divalidasi (status OPEN).</div>';
+      return;
+    }
+    htmlStr = actHumas.map(h => {
+      const isOwner = isUserLogged && (loggedPegId === h.idPegawai);
+      let actions = '';
+      
+      if (isUserLogged) {
+        if (isLoggedAdmin) {
+          actions = `<div class="act-actions">
+            <button class="act-btn act-btn-success" onclick="valHumas('${h.id}', 'DISETUJUI')">Setujui</button>
+            <button class="act-btn act-btn-danger" onclick="valHumas('${h.id}', 'DITOLAK')">Tolak</button>
+          </div>`;
+        } else if (isOwner) {
+          actions = `<div class="act-actions">
+            <button class="act-btn" onclick="editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}')">Edit</button>
+            <button class="act-btn act-btn-danger" onclick="deleteHumas('${h.id}')">Hapus</button>
+          </div>`;
+        }
+      }
+
+      return `
+        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
+          <div style="display:flex; width:100%; align-items:center; gap:8px;">
+            <div class="act-dot dot-humas"></div>
+            <div class="act-content">
+              <div class="act-title">${escHtml(h.namaKonten)}</div>
+              <div class="act-meta">${escHtml(h.namaPegawai)} · ${escHtml(h.platform)} · ${escHtml(h.jenisKonten)}</div>
+            </div>
+            <div class="act-time">${formatShortDate(h.tanggalSubmit)}</div>
+          </div>
+          ${actions}
+        </div>`;
+    }).join('');
+  } 
+  
+  else if (tab === 'bbm') {
+    const filteredBbmList = actBbm.filter(b => {
+      const statusUpper = b.status.toUpperCase();
+      return statusUpper === 'OPEN' || statusUpper === 'DISETUJUI';
+    });
+    if (!filteredBbmList.length) {
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan BBM yang aktif.</div>';
+      return;
+    }
+    htmlStr = filteredBbmList.map(b => {
+      const isOwner = isUserLogged && (loggedPegId === b.id_pegawai);
+      const isStatusOpen = b.status.toUpperCase() === 'OPEN';
+      const isStatusApproved = b.status.toUpperCase() === 'DISETUJUI';
+
+      let actions = '';
+      let statusLabel = b.status;
+      let statusColor = 'var(--muted)';
+
+      if (isStatusOpen) {
+        statusLabel = 'MENUNGGU DISETUJUI';
+        statusColor = 'var(--orange)';
+        if (isUserLogged) {
+          if (isLoggedAdmin) {
+            actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
+          } else if (isOwner) {
+            actions = `<div class="act-actions">
+              <button class="act-btn" onclick="editBbm('${b.id_bbm}', '${b.jenis_voucher}', '${b.jumlah}', '${escHtml(b.lokasi_tujuan)}')">Edit</button>
+              <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}')">Hapus</button>
+            </div>`;
+          }
+        }
+      } else if (isStatusApproved) {
+        statusLabel = 'BELUM DILAPORKAN';
+        statusColor = 'var(--yellow)';
+        if (isOwner) {
+          actions = `<div class="act-actions"><button class="act-btn act-btn-primary" onclick="openLaporBbmModal('${b.id_bbm}', ${b.jumlah}, '${escHtml(b.nama_penerima)}', '${b.jenis_voucher}', '${escHtml(b.lokasi_tujuan)}')">Lapor Penggunaan</button></div>`;
+        } else if (isLoggedAdmin) {
+          actions = `<div class="act-actions"><span style="font-size:10px;color:var(--muted)">Menunggu Laporan Pengguna</span></div>`;
+        }
+      }
+
+      return `
+        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
+          <div style="display:flex; width:100%; align-items:center; gap:8px;">
+            <div class="act-dot" style="background:${statusColor}"></div>
+            <div class="act-content">
+              <div class="act-title">${escHtml(b.nama_penerima)} · ${b.jenis_voucher} (${b.jumlah} Pcs)</div>
+              <div class="act-meta">${escHtml(b.bidang)} · Tujuan: ${escHtml(b.lokasi_tujuan)} · <span style="font-weight:700;color:${statusColor}">${statusLabel}</span></div>
+            </div>
+            <div class="act-time">${formatShortDate(b.tgl_submit)}</div>
+          </div>
+          ${actions}
+        </div>`;
+    }).join('');
+  }
+
+  listEl.innerHTML = htmlStr;
+}
+
+// ── POST ACTION WRAPPER ──────────────────────
+async function postAction(payload) {
+  if (!currentUser) { alert("Silakan login dengan Google terlebih dahulu."); return; }
+  payload.id_token = currentUser.id_token;
+  try {
+    const res = await fetch(CFG.APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      alert(data.message || "Aksi berhasil!");
+      loadStats(); loadAktivitasTerkini();
+  if (typeof google !== 'undefined') { initGIS(); }
+  else { document.querySelector('script[src*="accounts.google.com"]').addEventListener('load', initGIS); }
+      loadAktivitasTerkini();
+    } else {
+      alert(data.message || "Aksi gagal.");
+    }
+  } catch (err) {
+    alert("Koneksi gagal: " + err.message);
+  }
+}
+
+// ── Admin Actions ───────────────────────────
+async function valHelpdesk(id)   { await postAction({ action: "validateHelpdesk", id_tiket: id }); }
+async function selesaiHelpdesk(id) { await postAction({ action: "selesaiHelpdesk", id_tiket: id }); }
+async function valHumas(id, status){ await postAction({ action: "validateHumas", id_konten: id, status }); }
+async function valBbm(id)         { await postAction({ action: "validateBbm", id_bbm: id }); }
+async function selesaiBbm(id)     { await postAction({ action: "selesaiBbm", id_bbm: id }); }
+
+// ── User Actions (Edit & Delete) ──────────────
+function editHelpdesk(id, judul, deskripsi) {
+  document.getElementById('edit-hd-id').value = id;
+  document.getElementById('edit-hd-judul').value = judul;
+  document.getElementById('edit-hd-deskripsi').value = deskripsi;
+  openModal('edit-helpdesk-modal');
+}
+async function deleteHelpdesk(id) {
+  if (confirm("Apakah Anda yakin ingin menghapus tiket helpdesk ini?")) {
+    await postAction({ action: "deleteHelpdesk", id_tiket: id });
+  }
+}
+
+function editHumas(id, nama, tanggal, link) {
+  document.getElementById('edit-hum-id').value = id;
+  document.getElementById('edit-hum-nama').value = nama;
+  // Convert date format from YYYY-MM-DD
+  document.getElementById('edit-hum-tanggal').value = tanggal;
+  document.getElementById('edit-hum-link').value = link;
+  openModal('edit-humas-modal');
+}
+async function deleteHumas(id) {
+  if (confirm("Apakah Anda yakin ingin menghapus konten humas ini?")) {
+    await postAction({ action: "deleteHumas", id_konten: id });
+  }
+}
+
+function editBbm(id, jenis, jumlah, tujuan) {
+  document.getElementById('edit-bbm-id').value = id;
+  document.getElementById('edit-bbm-jenis').value = jenis;
+  document.getElementById('edit-bbm-jumlah').value = jumlah;
+  document.getElementById('edit-bbm-tujuan').value = tujuan;
+  openModal('edit-bbm-modal');
+}
+async function deleteBbm(id) {
+  if (confirm("Apakah Anda yakin ingin menghapus permohonan BBM ini?")) {
+    await postAction({ action: "deleteBbm", id_bbm: id });
+  }
+}
+
+function openLaporBbmModal(id, maxVouchers, penerima, jenis, tujuan) {
+  document.getElementById('rep-id-bbm').value = id;
+  document.getElementById('rep-max-vouchers').value = maxVouchers;
+  document.getElementById('f-rep-used').max = maxVouchers;
+  document.getElementById('f-rep-used').value = maxVouchers;
+  
+  document.getElementById('report-summary-info').innerHTML = `
+    <strong>ID BBM:</strong> ${id}<br/>
+    <strong>Penerima:</strong> ${penerima}<br/>
+    <strong>Voucher:</strong> ${jenis} (${maxVouchers} Pcs)<br/>
+    <strong>Tujuan:</strong> ${tujuan}
+  `;
+  
+  // Clear any old files
+  ['geotag', 'surat', 'laporan', 'nota'].forEach(clearRepFile);
+  
+  openModal('report-bbm-modal');
+}
+
+// ── Submit Edit/Report Forms ──────────────────
+async function submitEditHelpdesk(e) {
+  e.preventDefault();
+  const id = document.getElementById('edit-hd-id').value;
+  const judul = document.getElementById('edit-hd-judul').value;
+  const deskripsi = document.getElementById('edit-hd-deskripsi').value;
+  closeModal('edit-helpdesk-modal');
+  await postAction({ action: "updateHelpdesk", id_tiket: id, judul, deskripsi });
+}
+
+async function submitEditHumas(e) {
+  e.preventDefault();
+  const id = document.getElementById('edit-hum-id').value;
+  const nama = document.getElementById('edit-hum-nama').value;
+  const tanggal = document.getElementById('edit-hum-tanggal').value;
+  const link = document.getElementById('edit-hum-link').value;
+  closeModal('edit-humas-modal');
+  await postAction({ action: "updateHumas", id_konten: id, nama_konten: nama, tanggal_posting: tanggal, link_konten: link });
+}
+
+async function submitEditBbm(e) {
+  e.preventDefault();
+  const id = document.getElementById('edit-bbm-id').value;
+  const jenis = document.getElementById('edit-bbm-jenis').value;
+  const jumlah = document.getElementById('edit-bbm-jumlah').value;
+  const tujuan = document.getElementById('edit-bbm-tujuan').value;
+  closeModal('edit-bbm-modal');
+  await postAction({ action: "updateBbm", id_bbm: id, jenis_voucher: jenis, jumlah, lokasi_tujuan: tujuan });
+}
+
+async function submitBbmReport(e) {
+  e.preventDefault();
+  const id = document.getElementById('rep-id-bbm').value;
+  const used = parseInt(document.getElementById('f-rep-used').value) || 0;
+  const max = parseInt(document.getElementById('rep-max-vouchers').value) || 0;
+  
+  if (used > max) {
+    alert(`Jumlah voucher yang dilaporkan (${used}) melebihi kuota permohonan (${max}).`);
+    return;
+  }
+  
+  if (!filesData.geotag.base64 || !filesData.surat.base64) {
+    alert('Dokumen Geotag dan Surat Tugas wajib diunggah.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit-report');
+  btn.disabled = true;
+  btn.textContent = '⏳ Mengirim laporan...';
+
+  const payload = {
+    action: "submitBbmReport",
+    id_bbm: id,
+    jumlah_digunakan: used,
+    foto_geotag_base64: filesData.geotag.base64,
+    surat_base64: filesData.surat.base64,
+    dokumen_laporan_base64: filesData.laporan.base64,
+    nota_bensin_base64: filesData.nota.base64
+  };
+
+  closeModal('report-bbm-modal');
+  await postAction(payload);
+  btn.disabled = false;
+  btn.textContent = 'Kirim Laporan Penggunaan';
+}
 let homeBookings = [];
 let selectedHomeDate = new Date().toISOString().split("T")[0];
 
@@ -1330,7 +1869,9 @@ function renderSelectedDayBookings(dateStr, bookings) {
 
 
 
-loadStats();
+loadStats(); loadAktivitasTerkini();
+  if (typeof google !== 'undefined') { initGIS(); }
+  else { document.querySelector('script[src*="accounts.google.com"]').addEventListener('load', initGIS); }
 
 // --- SCROLL TO PAGE FOR APP-GRID ---
 function scrollToPage(pageIndex) {
@@ -1411,5 +1952,150 @@ document.addEventListener("focusout", e => {
   }
 });
 </script>
+
+  <!-- Modal Edit Helpdesk -->
+  <div id="edit-helpdesk-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <button type="button" onclick="closeModal('edit-helpdesk-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Edit Tiket Helpdesk</div>
+      <form id="edit-helpdesk-form" onsubmit="submitEditHelpdesk(event)">
+        <input type="hidden" id="edit-hd-id"/>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Judul Masalah</label>
+          <input type="text" id="edit-hd-judul" class="form-control" required/>
+        </div>
+        <div class="field" style="margin-bottom: 16px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Deskripsi Masalah</label>
+          <textarea id="edit-hd-deskripsi" class="form-control" style="min-height:80px;" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit Humas -->
+  <div id="edit-humas-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <button type="button" onclick="closeModal('edit-humas-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Edit Konten Humas</div>
+      <form id="edit-humas-form" onsubmit="submitEditHumas(event)">
+        <input type="hidden" id="edit-hum-id"/>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Nama Konten</label>
+          <input type="text" id="edit-hum-nama" class="form-control" required/>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Rencana Posting</label>
+          <input type="date" id="edit-hum-tanggal" class="form-control" required/>
+        </div>
+        <div class="field" style="margin-bottom: 16px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten (Opsional)</label>
+          <input type="url" id="edit-hum-link" class="form-control"/>
+        </div>
+        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit BBM -->
+  <div id="edit-bbm-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <button type="button" onclick="closeModal('edit-bbm-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Edit Pengajuan BBM</div>
+      <form id="edit-bbm-form" onsubmit="submitEditBbm(event)">
+        <input type="hidden" id="edit-bbm-id"/>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Voucher</label>
+          <select id="edit-bbm-jenis" class="form-control" required>
+            <option value="PERTALITE">PERTALITE</option>
+            <option value="PERTAMAX">PERTAMAX</option>
+            <option value="DEXLITE">DEXLITE</option>
+          </select>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jumlah Voucher</label>
+          <input type="number" id="edit-bbm-jumlah" class="form-control" min="1" required/>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Lokasi Tujuan</label>
+          <input type="text" id="edit-bbm-tujuan" class="form-control" required/>
+        </div>
+        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Lapor BBM -->
+  <div id="report-bbm-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <button type="button" onclick="closeModal('report-bbm-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Lapor Penggunaan BBM</div>
+      
+      <div id="report-summary-info" class="modal-summary-card">
+        <!-- Terisi dinamis -->
+      </div>
+      
+      <form id="report-form" onsubmit="submitBbmReport(event)">
+        <input type="hidden" id="rep-id-bbm"/>
+        <input type="hidden" id="rep-max-vouchers"/>
+        
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jumlah Voucher yang Digunakan (pcs) <span style="color:var(--red)">*</span></label>
+          <input type="number" id="f-rep-used" class="form-control" min="0" required/>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px;">Sisa voucher akan otomatis dikembalikan ke admin.</div>
+        </div>
+
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;margin-top:16px;">Unggah Dokumen Bukti Dukung</div>
+        
+        <div class="upload-grid">
+          <!-- Foto Geotag -->
+          <div class="upload-card" id="zone-rep-geotag" onclick="triggerUpload('f-rep-geotag')">
+            <div class="upload-title">Foto Geotag *</div>
+            <div class="upload-limit">Gambar - Maks 5MB</div>
+            <input type="file" id="f-rep-geotag" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'geotag', 'image', 5)"/>
+            <div class="file-preview" id="prev-rep-geotag">
+              <button type="button" class="preview-remove" onclick="clearRepFile('geotag')">✕</button>
+              <img class="preview-thumb" id="thumb-rep-geotag" src="" alt="Geotag Preview"/>
+            </div>
+          </div>
+
+          <!-- Surat Tugas -->
+          <div class="upload-card" id="zone-rep-surat" onclick="triggerUpload('f-rep-surat')">
+            <div class="upload-title">Surat Tugas *</div>
+            <div class="upload-limit">PDF Saja - Maks 10MB</div>
+            <input type="file" id="f-rep-surat" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'surat', 'pdf', 10)"/>
+            <div class="file-preview" id="prev-rep-surat">
+              <button type="button" class="preview-remove" onclick="clearRepFile('surat')">✕</button>
+              <div class="preview-name" id="name-rep-surat">file.pdf</div>
+            </div>
+          </div>
+
+          <!-- Laporan Kegiatan -->
+          <div class="upload-card" id="zone-rep-laporan" onclick="triggerUpload('f-rep-laporan')">
+            <div class="upload-title">Laporan Kegiatan</div>
+            <div class="upload-limit">PDF Saja - Maks 10MB</div>
+            <input type="file" id="f-rep-laporan" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'laporan', 'pdf', 10)"/>
+            <div class="file-preview" id="prev-rep-laporan">
+              <button type="button" class="preview-remove" onclick="clearRepFile('laporan')">✕</button>
+              <div class="preview-name" id="name-rep-laporan">file.pdf</div>
+            </div>
+          </div>
+
+          <!-- Nota Bensin -->
+          <div class="upload-card" id="zone-rep-nota" onclick="triggerUpload('f-rep-nota')">
+            <div class="upload-title">Nota Bensin</div>
+            <div class="upload-limit">Gambar - Maks 3MB</div>
+            <input type="file" id="f-rep-nota" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'nota', 'image', 3)"/>
+            <div class="file-preview" id="prev-rep-nota">
+              <button type="button" class="preview-remove" onclick="clearRepFile('nota')">✕</button>
+              <img class="preview-thumb" id="thumb-rep-nota" src="" alt="Nota Preview"/>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit-report" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Kirim Laporan Penggunaan</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>

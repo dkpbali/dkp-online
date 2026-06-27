@@ -744,9 +744,7 @@ body.keyboard-open .more-drawer {
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tab-booking" onclick="switchTab('booking')">Booking</div>
-    <div class="tab" id="tab-jadwal" onclick="switchTab('jadwal')">Jadwal</div>
+  
   </div>
 
 
@@ -857,17 +855,7 @@ body.keyboard-open .more-drawer {
 
   </div>
 
-  <!-- ══ TAB JADWAL ══ -->
-  <div id="section-jadwal" class="section">
-    <!-- Date strip -->
-    <div class="date-strip" id="date-strip"></div>
-    <!-- Schedule content -->
-    <div id="jadwal-content">
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>
-    </div>
-  </div>
+
 
 </main>
 
@@ -927,13 +915,13 @@ body.keyboard-open .more-drawer {
 const CFG = { APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpcYW1OVdoe1wjJHjSW-sF_oK59Fm4lMuaL2dpJehEluD8mC0r1JPWF3wGmdAl/exec" };
 
 // ── Data ────────────────────────────────────
-let allPegawai  = [];
-let allLokasi   = [];
-let allBooking  = [];
-let selectedRoom = null;
-let selectedTipe = "RUANG RAPAT";
-let jadwalDate   = new Date();
+let allPegawai       = [];
+let allLokasi        = [];
+let allBooking       = [];
+let selectedRoom     = null;
+let selectedTipe     = "RUANG RAPAT";
 let editingBookingId = null;
+
 
 // Helper to normalize different date formats (e.g. YYYY-MM-DD vs DD/MM/YYYY)
 function normalizeDate(dateStr) {
@@ -1189,8 +1177,11 @@ async function submitBooking(e) {
   if (isRapat && !acara)  { alert("Nama acara wajib diisi."); btn.disabled=false; btn.textContent=editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`; return; }
   if (!isRapat && !ket)   { alert("Keterangan keperluan wajib diisi."); btn.disabled=false; btn.textContent=editingBookingId ? `Simpan Perubahan` : `Ajukan Booking`; return; }
 
+
+
   const payload = {
     action:         editingBookingId ? "updateBooking" : "submitBooking",
+    
     id_booking:     editingBookingId || "",
     id_pemohon:     pemId,
     nama_pemohon:   pem?.nama    || "",
@@ -1411,8 +1402,13 @@ async function deleteBooking(id) {
       return;
     }
     
+    if (!currentUser) {
+      alert('Login diperlukan untuk membatalkan booking.');
+      return;
+    }
     const payload = {
       action: "cancelBooking",
+      
       id_booking: id
     };
     
@@ -1497,19 +1493,6 @@ function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback)
   }
 }
 
-// Check tab and date from URL parameters immediately to avoid flash and network dependency
-const urlParams = new URLSearchParams(window.location.search);
-const tabParam = urlParams.get("tab");
-const dateParam = urlParams.get("date");
-if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam)) {
-  jadwalDate = new Date(dateParam);
-}
-if (tabParam === "jadwal") {
-  switchTab("jadwal");
-} else if (tabParam === "booking") {
-  switchTab("booking");
-}
-
 (async () => {
   // Set min date = today
   const today = new Date().toISOString().split("T")[0];
@@ -1517,7 +1500,10 @@ if (tabParam === "jadwal") {
   document.getElementById("f-tanggal").value = today;
 
   setTipe("RUANG RAPAT");
+
   await Promise.all([loadPegawai(), loadBooking()]);
+
+
 })();
 
 // Keyboard visual viewport handler

@@ -203,7 +203,6 @@ main{max-width:560px;margin:0 auto;padding:20px 16px 100px}
 .btn-submit:hover{opacity:.9}
 .btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:1}
 
-/* SUCCESS */
 #success-screen{
   display:none;flex-direction:column;
   align-items:center;text-align:center;
@@ -682,14 +681,9 @@ body.keyboard-open .more-drawer {
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tab-submit" onclick="switchTab('submit')">Submit Konten</div>
-    <div class="tab" id="tab-status" onclick="switchTab('status')">Status</div>
+  
   </div>
 
-
-  <!-- ══ TAB SUBMIT ══ -->
-  <div id="section-submit" class="section active">
 
     <!-- Success -->
     <div id="success-screen">
@@ -700,7 +694,7 @@ body.keyboard-open .more-drawer {
       <p>Admin Humas DKP Bali akan segera memvalidasi.<br/>ID submission Anda:</p>
       <div class="hum-badge" id="result-hum-id">HUM-0000</div>
       <p style="font-size:11px;color:var(--muted)">
-        Cek status di tab "Status" menggunakan nama Anda.
+        Konten telah dikirim ke admin via Telegram. Pantau status di Beranda.
       </p>
       <button class="btn-new" onclick="resetForm()">+ Submit Lagi</button>
     </div>
@@ -825,28 +819,7 @@ body.keyboard-open .more-drawer {
     </form>
   </div>
 
-  <!-- ══ TAB STATUS ══ -->
-  <div id="section-status" class="section">
-    <div style="margin-bottom:14px">
-      <div class="field">
-        <label>Cari konten</label>
-        <input type="text" id="search-konten"
-               placeholder="Nama, platform, atau judul konten..."
-               oninput="filterKonten()"/>
-      </div>
-    </div>
-    <div class="filter-row" id="status-filters">
-      <div class="filter-chip active" onclick="setStatusFilter('SEMUA', this)">Semua</div>
-      <div class="filter-chip" onclick="setStatusFilter('PENDING', this)">Pending</div>
-      <div class="filter-chip" onclick="setStatusFilter('DISETUJUI', this)">Disetujui</div>
-      <div class="filter-chip" onclick="setStatusFilter('DITOLAK', this)">Ditolak</div>
-    </div>
-    <div id="konten-list">
-      <div class="shimmer-card" style="height:100px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:100px; margin-bottom:10px;"></div>
-      <div class="shimmer-card" style="height:100px; margin-bottom:10px;"></div>
-    </div>
-  </div>
+
 
 </main>
 
@@ -907,12 +880,11 @@ const CFG = { APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwvaKzpc
 
 // ── State ───────────────────────────────────
 let allPegawai   = [];
-let allKonten    = [];
-let filterStatus = "SEMUA";
 let selectedPlatform = "";
 let selectedJenis    = "";
 let fotoB64 = null;
 let hasFoto = false;
+
 
 // Jenis konten per platform
 const JENIS_MAP = {
@@ -933,16 +905,10 @@ const PLATFORM_ICONS = {
 
 // ── Tabs ────────────────────────────────────
 function switchTab(tab) {
-  ["submit","status"].forEach(t => {
+  ["submit"].forEach(t => {
     document.getElementById(`section-${t}`).classList.toggle("active", t === tab);
     document.getElementById(`tab-${t}`).classList.toggle("active", t === tab);
   });
-  if (tab === "status")    loadKonten();
-
-  // Persist tab to URL
-  const url = new URL(window.location);
-  url.searchParams.set("tab", tab);
-  window.history.replaceState({}, "", url);
 }
 
 // ── Platform ─────────────────────────────────
@@ -1062,8 +1028,11 @@ async function submitHumas(e) {
   const peg    = allPegawai.find(p => p.id === pegId);
   const bidang = peg ? peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "") : "";
 
+
+
   const payload = {
     action:           "submitHumas",
+    
     id_pegawai:       pegId,
     nama_pegawai:     peg?.nama || "",
     bidang,
@@ -1309,14 +1278,15 @@ function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback)
 // Check tab from URL parameters immediately to avoid flash and network dependency
 const urlParams = new URLSearchParams(window.location.search);
 const tabParam = urlParams.get("tab");
-if (tabParam === "status") {
-  switchTab("status");
-} else if (tabParam === "submit") {
+if (tabParam === "submit") {
   switchTab("submit");
 }
 
 // ── Init ─────────────────────────────────────
+
 loadPegawai();
+
+
 
 // Keyboard visual viewport handler
 document.addEventListener("focusin", e => {

@@ -773,9 +773,7 @@ body.keyboard-open .more-drawer {
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" id="tab-form" onclick="switchTab('form')">Buat Permohonan</div>
-    <div class="tab" id="tab-laporan" onclick="switchTab('laporan')">Laporan Permohonan</div>
+  
   </div>
 
   <div id="section-form" class="section active">
@@ -895,34 +893,6 @@ body.keyboard-open .more-drawer {
     </div>
   </div>
 
-  <!-- TAB LAPORAN PENGGUNAAN & RIWAYAT -->
-  <div id="section-laporan" class="section">
-    <!-- Active Reports Card -->
-    <div class="form-card" style="margin-bottom: 24px;">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;font-family:var(--title-sans);text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border);padding-bottom:6px;display:flex;align-items:center;gap:8px;">
-        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--yellow);"></span>
-        Laporan Aktif (Belum Dilaporkan)
-      </div>
-      <div id="bbm-laporan-list">
-        <div class="loading-state" style="text-align:center; padding: 20px; color: var(--muted);">Memuat data permohonan aktif...</div>
-      </div>
-    </div>
-
-    <!-- History Card -->
-    <div class="form-card">
-      <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:14px;font-family:var(--title-sans);text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border);padding-bottom:6px;display:flex;align-items:center;gap:8px;">
-        <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--wave);"></span>
-        Riwayat Permohonan BBM
-      </div>
-      <div class="form-group" style="margin-bottom: 20px;">
-        <input type="text" id="search-bbm" class="form-control" placeholder="Cari nama, nopol, ID BBM, atau lokasi..." oninput="filterBbmStatus()"/>
-      </div>
-      <div id="bbm-status-list">
-        <div class="loading-state" style="text-align:center; padding: 20px; color: var(--muted);">Memuat data permohonan...</div>
-      </div>
-    </div>
-  </div>
-
 </main>
 
 <nav class="bottom-nav">
@@ -975,144 +945,6 @@ body.keyboard-open .more-drawer {
   </div>
 </div>
 
-
-  <!-- MODAL LAPOR PENGGUNAAN -->
-  <div id="report-modal" class="modal-overlay">
-    <div class="modal-content-card">
-      <button type="button" onclick="closeReportModal()" class="modal-close-btn">✕</button>
-      <div class="modal-header-title">Lapor Penggunaan BBM</div>
-      
-      <div id="report-summary-info" class="modal-summary-card">
-        <!-- Filled dynamically -->
-      </div>
-      
-      <form id="report-form" onsubmit="submitBbmReport(event)">
-        <input type="hidden" id="rep-id-bbm"/>
-        <input type="hidden" id="rep-max-vouchers"/>
-        
-        <!-- DYNAMIC FIELDS FOR STOK ADJUSTMENT -->
-        <div id="stok-adjust-fields" style="display:none;margin-bottom:16px;padding:12px;border:1px dashed var(--yellow);border-radius:10px;background:rgba(202,138,4,0.02);flex-direction:column;gap:12px;text-align:left;">
-          <div style="font-size:10px;font-weight:700;color:var(--yellow);text-transform:uppercase;font-family:var(--mono);">Detail Perjalanan Dinas (Laporan Susulan)</div>
-          
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" for="rep-tanggal">Tanggal Kegiatan<span>*</span></label>
-            <input type="date" id="rep-tanggal" class="form-control"/>
-          </div>
-          
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" for="rep-lokasi">Lokasi Tujuan (Kabupaten/Kota)<span>*</span></label>
-            <select id="rep-lokasi" class="form-control">
-              <option value="" disabled selected>-- Pilih Kabupaten/Kota --</option>
-              <option value="Kota Denpasar">Kota Denpasar</option>
-              <option value="Kabupaten Badung">Kabupaten Badung</option>
-              <option value="Kabupaten Bangli">Kabupaten Bangli</option>
-              <option value="Kabupaten Buleleng">Kabupaten Buleleng</option>
-              <option value="Kabupaten Gianyar">Kabupaten Gianyar</option>
-              <option value="Kabupaten Jembrana">Kabupaten Jembrana</option>
-              <option value="Kabupaten Karangasem">Kabupaten Karangasem</option>
-              <option value="Kabupaten Klungkung">Kabupaten Klungkung</option>
-              <option value="Kabupaten Tabanan">Kabupaten Tabanan</option>
-            </select>
-          </div>
-          
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" for="rep-kecamatan">Kecamatan<span>*</span></label>
-            <input type="text" id="rep-kecamatan" class="form-control" placeholder="Contoh: Kuta"/>
-          </div>
-
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" for="rep-jenis-kendaraan">Jenis Kendaraan<span>*</span></label>
-            <select id="rep-jenis-kendaraan" class="form-control" onchange="onRepJenisKendaraanChange()">
-              <option value="dinas">Kendaraan Dinas</option>
-              <option value="pribadi">Kendaraan Pribadi</option>
-            </select>
-          </div>
-          
-          <div class="form-group" style="margin-bottom:0;">
-            <label class="form-label" id="lbl-rep-nopol" for="rep-nopol">Nomor Polisi Kendaraan<span>*</span></label>
-            <select id="rep-nopol" class="form-control">
-              <option value="" disabled selected>-- Pilih Nomor Polisi --</option>
-              <option value="DK 39">DK 39</option>
-              <option value="DK 420 I">DK 420 I</option>
-              <option value="DK 421 I">DK 421 I</option>
-              <option value="DK 1702 B">DK 1702 B</option>
-              <option value="DK 423 I">DK 423 I</option>
-              <option value="DK 1829 A">DK 1829 A</option>
-              <option value="DK 1657 A">DK 1657 A</option>
-              <option value="DK 8255 D">DK 8255 D</option>
-              <option value="DK 7030 D">DK 7030 D</option>
-              <option value="DK 1476 D">DK 1476 D</option>
-            </select>
-          </div>
-          
-          <div class="form-group" style="margin-bottom:0; grid-column: span 2;">
-            <label class="form-label" for="rep-deskripsi">Deskripsi Kegiatan Lapangan<span>*</span></label>
-            <textarea id="rep-deskripsi" class="form-control" rows="2" placeholder="Jelaskan secara rinci kegiatan lapangan..."></textarea>
-          </div>
-        </div>
-        
-        <div class="form-group" style="margin-bottom:16px;text-align:left;">
-          <label class="form-label" for="rep-jumlah-used">Jumlah Voucher yang Digunakan (pcs)<span>*</span></label>
-          <input type="number" id="rep-jumlah-used" class="form-control" min="1" oninput="validateReportedVouchers(this)" required/>
-          <div style="font-size:9px;color:var(--muted);margin-top:4px;">* Maksimal voucher yang dapat dilaporkan sesuai kuota permohonan.</div>
-          <div id="rep-returned-warning" style="display:none; font-size:11px; color:var(--yellow); background:rgba(202,138,4,0.06); border:1px solid rgba(202,138,4,0.12); border-radius:8px; padding:10px; margin-top:10px; line-height:1.5;"></div>
-        </div>
-
-        <div style="font-size:10px;font-weight:700;color:var(--text);margin-bottom:10px;font-family:var(--title-sans);text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--border);padding-bottom:6px;text-align:left;">Unggah Dokumen Bukti Dukung</div>
-        
-        <div class="upload-grid" style="grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-          <!-- 1. FOTO GEOTAG -->
-          <div class="upload-card" id="zone-rep-geotag" onclick="triggerUpload('f-rep-geotag')" style="padding:12px 8px;">
-            <div class="upload-title" style="font-size:10px;">Foto Geotag*</div>
-            <div class="upload-limit" style="font-size:8px;">Gambar - Maks 3MB</div>
-            <input type="file" id="f-rep-geotag" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'geotag', 'image', 3)"/>
-            <div class="file-preview" id="prev-rep-geotag" onclick="event.stopPropagation();">
-              <button type="button" class="preview-remove" onclick="clearRepFile('geotag')">✕</button>
-              <img class="preview-thumb" id="thumb-rep-geotag" src="" alt="Geotag Preview"/>
-            </div>
-          </div>
-
-          <!-- 2. SURAT TUGAS / UNDANGAN -->
-          <div class="upload-card" id="zone-rep-surat" onclick="triggerUpload('f-rep-surat')" style="padding:12px 8px;">
-            <div class="upload-title" style="font-size:10px;">Surat Tugas*</div>
-            <div class="upload-limit" style="font-size:8px;">PDF Saja - Maks 3MB</div>
-            <input type="file" id="f-rep-surat" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'surat', 'pdf', 3)"/>
-            <div class="file-preview" id="prev-rep-surat" onclick="event.stopPropagation();">
-              <button type="button" class="preview-remove" onclick="clearRepFile('surat')">✕</button>
-              <div class="preview-name" id="name-rep-surat" style="font-size:8px;word-break:break-all;">file.pdf</div>
-            </div>
-          </div>
-
-          <!-- 3. LAPORAN KEGIATAN -->
-          <div class="upload-card" id="zone-rep-laporan" onclick="triggerUpload('f-rep-laporan')" style="padding:12px 8px;">
-            <div class="upload-title" style="font-size:10px;">Laporan Kegiatan</div>
-            <div class="upload-limit" style="font-size:8px;">PDF Saja - Maks 10MB</div>
-            <input type="file" id="f-rep-laporan" class="upload-input" accept="application/pdf" onchange="handleRepFileSelect(event, 'laporan', 'pdf', 10)"/>
-            <div class="file-preview" id="prev-rep-laporan" onclick="event.stopPropagation();">
-              <button type="button" class="preview-remove" onclick="clearRepFile('laporan')">✕</button>
-              <div class="preview-name" id="name-rep-laporan" style="font-size:8px;word-break:break-all;">file.pdf</div>
-            </div>
-          </div>
-
-          <!-- 4. RESI / NOTA BENSIN -->
-          <div class="upload-card" id="zone-rep-nota" onclick="triggerUpload('f-rep-nota')" style="padding:12px 8px;">
-            <div class="upload-title" style="font-size:10px;">Nota Bensin</div>
-            <div class="upload-limit" style="font-size:8px;">Gambar - Maks 3MB</div>
-            <input type="file" id="f-rep-nota" class="upload-input" accept="image/*" onchange="handleRepFileSelect(event, 'nota', 'image', 3)"/>
-            <div class="file-preview" id="prev-rep-nota" onclick="event.stopPropagation();">
-              <button type="button" class="preview-remove" onclick="clearRepFile('nota')">✕</button>
-              <img class="preview-thumb" id="thumb-rep-nota" src="" alt="Nota Preview"/>
-            </div>
-          </div>
-        </div>
-        
-        <button type="submit" class="btn btn-primary" id="btn-submit-report" style="width:100%;padding:12px;font-weight:700;">
-          Kirim Laporan Penggunaan
-        </button>
-      </form>
-    </div>
-  </div>
-
   <!-- Toast alert -->
   <div id="toast" class="toast"></div>
 
@@ -1125,25 +957,20 @@ const CFG = {
 
 // ── STATE ──
 let allPegawai = [];
-let filesData = {
-  geotag:  { base64: null, name: "" },
-  surat:   { base64: null, name: "" },
-  laporan: { base64: null, name: "" },
-  nota:    { base64: null, name: "" }
-};
+
 
 // Check tab from URL parameters immediately to avoid flash and network dependency
 const urlParams = new URLSearchParams(window.location.search);
 const tabParam = urlParams.get("tab");
-if (tabParam === "laporan") {
-  switchTab("laporan");
-} else if (tabParam === "form") {
+if (tabParam === "form") {
   switchTab("form");
 }
 
-// ── INITIALIZATION ──
 (async function init() {
+
   await loadPegawai();
+
+
 })();
 
 // Helper shorthand selector
@@ -1355,8 +1182,11 @@ async function submitFormBbm(event) {
   const peg = allPegawai.find(p => p.id === idPegawai);
   const bidangVal = peg ? (peg.bidang + (peg.subBidang ? ` - ${peg.subBidang}` : "")) : "";
 
+
+
   const payload = {
     action: editingBbmId ? "updateBbm" : "submitBbm",
+    
     id_bbm: editingBbmId || "",
     nama_penerima: namaPenerima,
     id_pegawai: idPegawai,
@@ -1515,20 +1345,12 @@ document.addEventListener("click", e => {
 
 // ── BBM STATUS AND CRUD HANDLERS ──
 function switchTab(tab) {
-  ["form","laporan"].forEach(t => {
+  ["form"].forEach(t => {
     const sec = $(`section-${t}`);
     const tabEl = $(`tab-${t}`);
     if (sec) sec.classList.toggle("active", t === tab);
     if (tabEl) tabEl.classList.toggle("active", t === tab);
   });
-  if (tab === "laporan") {
-    loadBbmLaporan();
-  }
-
-  // Persist tab to URL
-  const url = new URL(window.location);
-  url.searchParams.set("tab", tab);
-  window.history.replaceState({}, "", url);
 }
 
 async function loadBbmStatus() {
