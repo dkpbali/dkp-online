@@ -985,6 +985,18 @@ main { padding-bottom: 40px !important; }
               <div class="app-desc">Formulir pengisian BBM operasional tugas lapangan.</div>
             </div>
           </a>
+          <a class="app-card app-card-kendaraan" href="kendaraan/index.html">
+            <div class="app-icon icon-kendaraan" style="background: rgba(0, 119, 230, 0.08);">
+              <svg class="svg-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--wave)"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1 .4-1 1v10c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="15" cy="17" r="2"/></svg>
+            </div>
+            <div class="app-content">
+              <div class="app-header-row">
+                <span class="app-name">Pinjam Kendaraan</span>
+                <span class="app-badge badge-count" id="badge-kendaraan">Memuat...</span>
+              </div>
+              <div class="app-desc">Peminjaman kendaraan dinas Sekretariat untuk dinas & pribadi.</div>
+            </div>
+          </a>
         </div>
       </div>
 
@@ -1013,13 +1025,13 @@ main { padding-bottom: 40px !important; }
           <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </div>
       </a>
-      <a class="monitor-card" href="dashboard/dashboard_bbm/index.html" style="margin-bottom: 24px;">
+      <a class="monitor-card" href="dashboard/dashboard_kendaraan/index.html" style="margin-bottom: 24px;">
         <div class="monitor-icon" style="background: linear-gradient(135deg, var(--sea), var(--wave));">
           <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         </div>
         <div class="monitor-body">
           <div class="monitor-title" style="display: flex; align-items: center; gap: 8px;">
-            <span>Dashboard BBM &amp; Operasional</span>
+            <span>Dashboard Kendaraan</span>
           </div>
           <div class="monitor-desc">Statistik realisasi, kuota voucher BBM, dan serapan per bidang.</div>
         </div>
@@ -1030,13 +1042,6 @@ main { padding-bottom: 40px !important; }
     </div>
 
     <div class="desktop-right">
-      <div class="section-title">Jadwal Ruang Rapat</div>
-      <div class="calendar-card">
-        <div class="date-strip" id="date-strip"></div>
-        <div class="calendar-bookings-list" id="calendar-bookings-list">
-          <div class="cal-booking-empty">Memuat jadwal...</div>
-        </div>
-      </div>
 
       
       <!-- Google Login Bar -->
@@ -1063,6 +1068,7 @@ main { padding-bottom: 40px !important; }
         <div class="tab active" id="tab-act-helpdesk" onclick="switchActTab('helpdesk')" style="flex:1; text-align:center; padding:8px; font-size:12px;">Helpdesk</div>
         <div class="tab" id="tab-act-humas" onclick="switchActTab('humas')" style="flex:1; text-align:center; padding:8px; font-size:12px;">Humas</div>
         <div class="tab" id="tab-act-bbm" onclick="switchActTab('bbm')" style="flex:1; text-align:center; padding:8px; font-size:12px;">BBM</div>
+        <div class="tab" id="tab-act-rapat" onclick="switchActTab('rapat')" style="flex:1; text-align:center; padding:8px; font-size:12px;">Rapat</div>
       </div>
 
       <div class="activity-list" id="activity-list">
@@ -1116,6 +1122,7 @@ let currentUser = null; // { email, name, id_token, id_pegawai, is_admin, ... }
 let actHelpdesk   = [];
 let actHumas      = [];
 let actBbm        = [];
+let actRapat      = [];
 let currentActTab = 'helpdesk';
 
 // ── File Upload State ────────────────────────
@@ -1385,12 +1392,14 @@ async function loadStats() {
     const totalAset      = success ? asData.length : 0;
     const bbmPending     = success ? bbmData.filter(b => b.status.toUpperCase() === "OPEN").length : 0;
 
-    updateStats({ aset: totalAset, tiketOpen, bookingPending, bbmPending });
-    initHomepageCalendar(success ? bkData : []);
+    const kdrData = rData.kendaraan || [];
+const kdrPending = success ? kdrData.filter(k => k.status.toUpperCase() === "OPEN").length : 0;
+updateStats({ aset: totalAset, tiketOpen, bookingPending, bbmPending, kdrPending });
+    
   } catch (err) {
     console.error("loadStats processing error:", err);
     updateStats({ aset: 0, tiketOpen: 0, bookingPending: 0, bbmPending: 0 });
-    initHomepageCalendar([]);
+    
   }
 }
 
@@ -1400,12 +1409,13 @@ function updateStats({ aset, tiketOpen, bookingPending, bbmPending }) {
   document.getElementById("badge-rapat").textContent     = bookingPending > 0 ? `${bookingPending} pending` : "Tersedia";
   document.getElementById("badge-humas").textContent     = "Submit konten";
   document.getElementById("badge-bbm").textContent       = bbmPending > 0 ? `${bbmPending} pending` : "Semua clear";
+if (document.getElementById("badge-kendaraan")) document.getElementById("badge-kendaraan").textContent = (kdrPending || 0) > 0 ? `${kdrPending} pending` : "Semua clear";
 }
 
 // ── 3-Tab Aktivitas Terkini ───────────────────
 function switchActTab(tab) {
   currentActTab = tab;
-  ['helpdesk', 'humas', 'bbm'].forEach(t => {
+  ['helpdesk', 'humas', 'bbm', 'rapat'].forEach(t => {
     const el = document.getElementById(`tab-act-${t}`);
     if (el) el.classList.toggle('active', t === tab);
   });
@@ -1432,6 +1442,7 @@ async function loadAktivitasTerkini() {
       actHelpdesk = json.helpdesk || [];
       actHumas = json.humas || [];
       actBbm = json.bbm || [];
+      actRapat = json.booking || [];
       renderActTab(currentActTab);
     }
   } catch(e) { 
@@ -1586,6 +1597,19 @@ function renderActTab(tab) {
         </div>`;
     }).join('');
   }
+
+    else if (tab === 'rapat') {
+  listEl.innerHTML = `
+    <div class="calendar-card" style="margin-top: 8px; border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: var(--card);">
+      <div class="date-strip" id="date-strip" style="margin-bottom:12px;"></div>
+      <div class="calendar-bookings-list" id="calendar-bookings-list">
+        <div class="cal-booking-empty">Memuat jadwal...</div>
+      </div>
+    </div>
+  `;
+  initHomepageCalendar(actRapat);
+  return;
+}
 
   listEl.innerHTML = htmlStr;
 }
@@ -1951,6 +1975,43 @@ document.addEventListener("focusout", e => {
     document.body.classList.remove("keyboard-open");
   }
 });
+
+// ── Rapat Actions ───────────────────────────
+async function valBooking(id, status) {
+  if (confirm(`Tentukan status booking ini menjadi ${status}?`)) {
+    await postAction({ action: "validateBooking", id_booking: id, status });
+  }
+}
+async function cancelBooking(id) {
+  if (confirm("Apakah Anda yakin ingin membatalkan booking ruangan ini?")) {
+    await postAction({ action: "cancelBooking", id_booking: id });
+  }
+}
+function editBooking(id, acara, tanggal, mulai, selesai) {
+  document.getElementById('edit-book-id').value = id;
+  document.getElementById('edit-book-acara').value = acara;
+  document.getElementById('edit-book-tanggal').value = tanggal;
+  document.getElementById('edit-book-mulai').value = mulai;
+  document.getElementById('edit-book-selesai').value = selesai;
+  openModal('edit-booking-modal');
+}
+async function submitEditBooking(e) {
+  e.preventDefault();
+  const id = document.getElementById('edit-book-id').value;
+  const acara = document.getElementById('edit-book-acara').value;
+  const tanggal = document.getElementById('edit-book-tanggal').value;
+  const mulai = document.getElementById('edit-book-mulai').value;
+  const selesai = document.getElementById('edit-book-selesai').value;
+  closeModal('edit-booking-modal');
+  await postAction({
+    action: "updateBooking",
+    id_booking: id,
+    nama_acara: acara,
+    tanggal: tanggal,
+    jam_mulai: mulai,
+    jam_selesai: selesai
+  });
+}
 </script>
 
   <!-- Modal Edit Helpdesk -->
@@ -2094,6 +2155,36 @@ document.addEventListener("focusout", e => {
         </div>
 
         <button type="submit" class="btn-submit" id="btn-submit-report" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Kirim Laporan Penggunaan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit Booking Rapat -->
+  <div id="edit-booking-modal" class="modal-overlay">
+    <div class="modal-content-card">
+      <button type="button" onclick="closeModal('edit-booking-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Edit Booking Ruangan</div>
+      <form id="edit-booking-form" onsubmit="submitEditBooking(event)">
+        <input type="hidden" id="edit-book-id"/>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Nama Acara/Kegiatan</label>
+          <input type="text" id="edit-book-acara" class="form-control" required/>
+        </div>
+        <div class="field" style="margin-bottom: 12px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Booking</label>
+          <input type="date" id="edit-book-tanggal" class="form-control" required/>
+        </div>
+        <div class="field" style="margin-bottom: 12px; display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jam Mulai</label>
+            <input type="time" id="edit-book-mulai" class="form-control" required/>
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jam Selesai</label>
+            <input type="time" id="edit-book-selesai" class="form-control" required/>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
       </form>
     </div>
   </div>

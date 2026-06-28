@@ -17,7 +17,7 @@ const PRECACHE_URLS = [
   "helpdesk/index.html",
   "rapat/index.html",
   "humas/index.html",
-  "dashboard/dashboard_bbm/index.html",
+  "dashboard/dashboard_kendaraan/index.html",
   "dashboard/dashboard_ekspor/index.html",
   "dashboard/dashboard_ews/index.html",
   "dashboard/dashboard_ews/verifikasi.html",
