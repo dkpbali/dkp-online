@@ -1446,17 +1446,32 @@ function parseTanggal(str) {
     );
   }
   
-  // Try matching dd/MM/yyyy HH:mm:ss or dd/MM/yyyy
+  // Try matching dd/MM/yyyy or MM/DD/yyyy
   const mSlashes = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (mSlashes) {
-    return new Date(
-      parseInt(mSlashes[3], 10),
-      parseInt(mSlashes[2], 10) - 1,
-      parseInt(mSlashes[1], 10),
-      mSlashes[4] ? parseInt(mSlashes[4], 10) : 0,
-      mSlashes[5] ? parseInt(mSlashes[5], 10) : 0,
-      mSlashes[6] ? parseInt(mSlashes[6], 10) : 0
-    );
+    const val1 = parseInt(mSlashes[1], 10);
+    const val2 = parseInt(mSlashes[2], 10);
+    const year = parseInt(mSlashes[3], 10);
+    const hr = mSlashes[4] ? parseInt(mSlashes[4], 10) : 0;
+    const min = mSlashes[5] ? parseInt(mSlashes[5], 10) : 0;
+    const sec = mSlashes[6] ? parseInt(mSlashes[6], 10) : 0;
+    
+    let month, day;
+    if (val1 > 12) {
+      // First number is > 12, so it must be Day (DD/MM/YYYY)
+      day = val1;
+      month = val2;
+    } else if (val2 > 12) {
+      // Second number is > 12, so it must be Day (MM/DD/YYYY)
+      month = val1;
+      day = val2;
+    } else {
+      // Both <= 12, ambiguous. Default to DD/MM/YYYY since Apps Script writes in dd/MM/yyyy.
+      day = val1;
+      month = val2;
+    }
+    
+    return new Date(year, month - 1, day, hr, min, sec);
   }
   
   // Fallback
