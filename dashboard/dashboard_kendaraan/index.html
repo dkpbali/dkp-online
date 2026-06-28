@@ -1210,12 +1210,13 @@ function parseTanggal(str) {
     );
   }
   
+  // Format M/D/YYYY or MM/DD/YYYY (Google Sheets default output)
   const mSlashes = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);
   if (mSlashes) {
     return new Date(
-      parseInt(mSlashes[3], 10),
-      parseInt(mSlashes[2], 10) - 1,
-      parseInt(mSlashes[1], 10),
+      parseInt(mSlashes[3], 10),   // year
+      parseInt(mSlashes[1], 10) - 1, // month (first number = MM)
+      parseInt(mSlashes[2], 10),     // day   (second number = DD)
       mSlashes[4] ? parseInt(mSlashes[4], 10) : 0,
       mSlashes[5] ? parseInt(mSlashes[5], 10) : 0,
       mSlashes[6] ? parseInt(mSlashes[6], 10) : 0
@@ -1266,8 +1267,8 @@ async function loadDashboardData() {
         JENIS:               v.JENIS       || v.jenis        || "",
         TAHUN:               v.TAHUN       || v.tahun        || "",
         WARNA:               v.WARNA       || v.warna        || "",
-        FOTO_DEPAN:          v.FOTO_DEPAN  || v.foto_depan   || "",
-        FOTO_BELAKANG:       v.FOTO_BELAKANG || v.foto_belakang || "",
+        FOTO_DEPAN:          v.FOTO_DEPAN  || v.foto_depan  || v.FOTO || v.foto || v.GAMBAR_DEPAN || v.URL_FOTO_DEPAN || "",
+        FOTO_BELAKANG:       v.FOTO_BELAKANG || v.foto_belakang || v.GAMBAR_BELAKANG || v.URL_FOTO_BELAKANG || "",
         TGL_PAJAK:           v.TGL_PAJAK   || v.tgl_pajak    || "",
         TGL_STNK:            v.TGL_STNK    || v.tgl_stnk     || "",
         TGL_SERVICE_TERAKHIR: v.TGL_SERVICE_TERAKHIR || v.tgl_service_terakhir || "",
