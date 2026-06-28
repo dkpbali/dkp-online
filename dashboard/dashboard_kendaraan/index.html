@@ -1192,6 +1192,15 @@ let openBidangGroups = { 0: true }; // Open SEKRETARIAT by default
 // Helper shorthand selector
 function $(id) { return document.getElementById(id); }
 
+// Convert Google Drive sharing URL to embeddable direct image URL
+function toDriveDirectUrl(url) {
+  if (!url) return "";
+  // Match /file/d/FILE_ID/ or /d/FILE_ID pattern
+  const m = url.match(/\/d\/([a-zA-Z0-9_-]{10,})/); 
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  return url; // return as-is if not a Drive URL
+}
+
 function parseTanggal(str) {
   if (!str) return null;
   if (str instanceof Date) return isNaN(str.getTime()) ? null : str;
@@ -1486,8 +1495,8 @@ function renderVehicles() {
 
 function renderVehicleDetailContent(v) {
   const trips = countTripsThisYear(v.NO_POLISI);
-  const photoDepan = v.FOTO_DEPAN || "";
-  const photoBelakang = v.FOTO_BELAKANG || "";
+  const photoDepan = toDriveDirectUrl(v.FOTO_DEPAN || "");
+  const photoBelakang = toDriveDirectUrl(v.FOTO_BELAKANG || "");
   
   let photosHtml = "";
   if (photoDepan || photoBelakang) {
@@ -1931,7 +1940,9 @@ function renderBidangAllocation() {
   const maxLiters = Math.max(...Object.values(allocation).map(a => a.totalLiters), 1);
   const fTahun = $("f-tahun").value;
 
-  const html = BIDANG_LIST.map((b, idx) => {
+  // Sort bidang by highest totalLiters (most usage first)
+  const sortedBidang = [...BIDANG_LIST].sort((a, b) => (allocation[b]?.totalLiters || 0) - (allocation[a]?.totalLiters || 0));
+  const html = sortedBidang.map((b, idx) => {
     const alloc = allocation[b];
     const percentage = Math.round((alloc.totalLiters / maxLiters) * 100);
     const isOpen = openAccordions[idx] ? "open" : "";
