@@ -1817,8 +1817,9 @@ async function submitBbmReport(e) {
   }
 
   const btn = document.getElementById('btn-submit-report');
+  const oldText = btn.textContent;
   btn.disabled = true;
-  btn.textContent = '⏳ Mengirim laporan...';
+  btn.textContent = '⏳ Sedang mengunggah berkas & mengirim laporan...';
 
   const payload = {
     action: "submitBbmReport",
@@ -1830,10 +1831,16 @@ async function submitBbmReport(e) {
     nota_bensin_base64: filesData.nota.base64
   };
 
-  closeModal('report-bbm-modal');
-  await postAction(payload);
-  btn.disabled = false;
-  btn.textContent = 'Kirim Laporan Penggunaan';
+  try {
+    await postAction(payload);
+    closeModal('report-bbm-modal');
+  } catch (err) {
+    console.error(err);
+    alert('Gagal mengirim laporan. Coba lagi.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = oldText;
+  }
 }
 let homeBookings = [];
 let selectedHomeDate = new Date().toISOString().split("T")[0];
