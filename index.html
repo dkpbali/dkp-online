@@ -863,6 +863,20 @@ main { padding-bottom: 40px !important; }
   border-color: var(--wave);
   background: var(--card);
 }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin-loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
 </style>
 </head>
 <body>
@@ -1872,15 +1886,23 @@ async function submitBbmReport(e) {
     return;
   }
   
-  if (!filesData.geotag.base64 || !filesData.surat.base64) {
-    alert('Dokumen Geotag dan Surat Tugas wajib diunggah.');
-    return;
+  const isStok = (document.getElementById("rep-stok-adjust-fields").style.display === "flex");
+  if (isStok) {
+    if (!filesData.geotag.base64 || !filesData.surat.base64) {
+      alert('Dokumen Geotag dan Surat Tugas wajib diunggah untuk Laporan Stok Cadangan.');
+      return;
+    }
+  } else {
+    if (!filesData.geotag.base64 || !filesData.surat.base64 || !filesData.laporan.base64 || !filesData.nota.base64) {
+      alert('Untuk laporan jenis normal, semua 4 bukti dukung (Foto Geotag, Surat Tugas, Laporan Kegiatan, dan Nota Bensin) wajib diunggah secara lengkap.');
+      return;
+    }
   }
 
   const btn = document.getElementById('btn-submit-report');
-  const oldText = btn.textContent;
+  const oldHtml = btn.innerHTML;
   btn.disabled = true;
-  btn.textContent = '⏳ Sedang mengunggah berkas & mengirim laporan...';
+  btn.innerHTML = '<span class="spin-loader"></span> Sedang mengunggah berkas & mengirim laporan...';
 
   const payload = {
     action: "submitBbmReport",
@@ -1892,7 +1914,7 @@ async function submitBbmReport(e) {
     nota_bensin_base64: filesData.nota.base64
   };
 
-  if (document.getElementById("rep-stok-adjust-fields").style.display === "flex") {
+  if (isStok) {
     payload.lokasi_tujuan = document.getElementById("f-rep-lokasi").value;
     payload.kecamatan = document.getElementById("f-rep-kecamatan").value.trim();
     payload.tgl_kegiatan = document.getElementById("f-rep-tanggal").value;
@@ -1912,12 +1934,13 @@ async function submitBbmReport(e) {
   try {
     await postAction(payload);
     closeModal('report-bbm-modal');
+    window.location.href = window.location.pathname + "?actTab=bbm";
   } catch (err) {
     console.error(err);
     alert('Gagal mengirim laporan. Coba lagi.');
   } finally {
     btn.disabled = false;
-    btn.textContent = oldText;
+    btn.innerHTML = oldHtml;
   }
 }
 let homeBookings = [];
