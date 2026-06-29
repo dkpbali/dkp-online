@@ -804,6 +804,39 @@ main { padding-bottom: 40px !important; }
 #login-bar .login-bar-sub{color:rgba(255,255,255,0.8);font-size:12px;line-height:1.4;}
 #gis-btn-container{flex-shrink:0;}
 #gis-btn-container>div{border-radius:8px!important;overflow:hidden;}
+
+@media (max-width: 576px) {
+  #login-bar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 20px 16px;
+  }
+  #login-bar .login-bar-icon {
+    font-size: 32px;
+  }
+  #login-bar .login-bar-text {
+    width: 100%;
+  }
+  #gis-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  #user-bar {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+  }
+  .btn-logout {
+    margin-left: 0 !important;
+    width: 100%;
+    text-align: center;
+  }
+}
 #user-bar{display:none;align-items:center;gap:10px;background:rgba(16, 185, 129, 0.08);border:1px solid rgba(16, 185, 129, 0.18);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
 #user-bar .user-name{font-weight:600;font-size:13px;color:var(--text);}
 #user-bar .user-email{font-size:11px;color:var(--muted);}
