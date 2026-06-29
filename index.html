@@ -1706,6 +1706,20 @@ async function deleteBbm(id) {
 }
 
 function openLaporBbmModal(id, maxVouchers, penerima, jenis, tujuan) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu.");
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+      google.accounts.id.prompt();
+    }
+    const loginBar = document.getElementById("login-bar");
+    if (loginBar) {
+      loginBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      loginBar.style.outline = "3px solid var(--wave)";
+      setTimeout(() => { loginBar.style.outline = "none"; }, 2000);
+    }
+    return;
+  }
+
   document.getElementById('rep-id-bbm').value = id;
   document.getElementById('rep-max-vouchers').value = maxVouchers;
   document.getElementById('f-rep-used').max = maxVouchers;
