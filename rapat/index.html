@@ -921,6 +921,11 @@ let allBooking       = [];
 let selectedRoom     = null;
 let selectedTipe     = "RUANG RAPAT";
 let editingBookingId = null;
+let currentUser = null;
+try {
+  const cached = sessionStorage.getItem("aruniwaves_user");
+  if (cached) currentUser = JSON.parse(cached);
+} catch (e) { console.error(e); }
 
 
 // Helper to normalize different date formats (e.g. YYYY-MM-DD vs DD/MM/YYYY)
@@ -1181,7 +1186,7 @@ async function submitBooking(e) {
 
   const payload = {
     action:         editingBookingId ? "updateBooking" : "submitBooking",
-    
+    id_token:       currentUser?.id_token || "",
     id_booking:     editingBookingId || "",
     id_pemohon:     pemId,
     nama_pemohon:   pem?.nama    || "",
@@ -1399,7 +1404,7 @@ async function deleteBooking(id) {
     }
     const payload = {
       action: "cancelBooking",
-      
+      id_token: currentUser.id_token,
       id_booking: id
     };
     

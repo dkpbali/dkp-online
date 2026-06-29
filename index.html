@@ -2078,18 +2078,12 @@ function renderSelectedDayBookings(dateStr, bookings) {
     <div style="font-size:11px; font-weight:700; color:var(--muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase;">JADWAL ${formattedDate} (${bookings.length})</div>
     <div style="display:flex; flex-direction:column; gap:8px;">
       ${bookings.map(b => {
-        let actionsHtml = "";
-        if (isUserLogged) {
-          const isOwner = (loggedPegId === b.idPemohon);
-          if (isLoggedAdmin || isOwner) {
-            actionsHtml = `
-              <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start;">
-                <button class="act-btn" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); editBookingHome('${b.id}')">Edit</button>
-                <button class="act-btn act-btn-danger" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); cancelBookingHome('${b.id}')">Hapus</button>
-              </div>
-            `;
-          }
-        }
+        const actionsHtml = `
+          <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start;">
+            <button class="act-btn" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); editBookingHome('${b.id}')">Edit</button>
+            <button class="act-btn act-btn-danger" style="padding: 4px 10px; font-size: 11px;" onclick="event.stopPropagation(); cancelBookingHome('${b.id}')">Hapus</button>
+          </div>
+        `;
 
         return `
           <div class="cal-booking-item" style="background: rgba(0, 119, 230, 0.02); border: 1px solid var(--border); border-left: 4px solid var(--wave); border-radius: 12px; padding: 12px 14px; transition: all 0.2s ease; cursor: pointer;" onclick="window.location.href='rapat/index.html?tab=jadwal&date=${dateStr}'" onmouseover="this.style.borderColor='var(--wave)'" onmouseout="this.style.borderColor='var(--border)'">
@@ -2124,10 +2118,18 @@ function renderSelectedDayBookings(dateStr, bookings) {
 }
 
 function editBookingHome(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk mengubah booking.");
+    return;
+  }
   window.location.href = `rapat/index.html?editBooking=${id}`;
 }
 
 async function cancelBookingHome(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk membatalkan booking.");
+    return;
+  }
   if (confirm("Apakah Anda yakin ingin membatalkan booking ruang rapat ini?")) {
     await postAction({ action: "cancelBooking", id_booking: id });
   }
