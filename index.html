@@ -1577,41 +1577,70 @@ function renderActTab(tab) {
   
   else if (tab === 'humas') {
     if (!actHumas.length) {
-      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan humas yang perlu divalidasi (status OPEN).</div>';
+      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan humas.</div>';
       return;
     }
-    htmlStr = actHumas.map(h => {
-      const isOwner = isUserLogged && (loggedPegId === h.idPegawai);
-      let actions = '';
-      
-      if (isUserLogged) {
-        if (isLoggedAdmin) {
-          actions = `<div class="act-actions">
-            <button class="act-btn act-btn-success" onclick="valHumas('${h.id}', 'DISETUJUI')">Setujui</button>
-            <button class="act-btn act-btn-danger" onclick="valHumas('${h.id}', 'DITOLAK')">Tolak</button>
-          </div>`;
-        } else if (isOwner) {
-          actions = `<div class="act-actions">
-            <button class="act-btn" onclick="editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}')">Edit</button>
-            <button class="act-btn act-btn-danger" onclick="deleteHumas('${h.id}')">Hapus</button>
-          </div>`;
-        }
-      }
 
-      return `
-        <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
-          <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
-            <div class="act-dot dot-humas"></div>
-            <div class="act-content" style="flex:1; min-width:0;">
-              <div class="act-title">${escHtml(h.namaKonten)}</div>
-              <div class="act-meta">${escHtml(h.namaPegawai)} · ${escHtml(h.platform)} · ${escHtml(h.jenisKonten)}</div>
+    const groups = {};
+    actHumas.forEach(h => {
+      const bidang = h.bidang ? h.bidang.split(" - ")[0].toUpperCase().trim() : "LAINNYA";
+      if (!groups[bidang]) groups[bidang] = [];
+      groups[bidang].push(h);
+    });
+
+    htmlStr = Object.entries(groups).map(([bidang, list], gIdx) => {
+      const marginStyle = gIdx > 0 ? 'margin-top:20px;' : 'margin-top:8px;';
+      const groupHeader = `<div style="font-size:11px; font-weight:700; color:var(--wave); ${marginStyle} margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed var(--border); padding-bottom:4px;">${bidang}</div>`;
+      
+      const itemsHtml = list.map(h => {
+        let actions = '';
+        let statusLabel = h.status || 'OPEN';
+        let statusColor = 'var(--muted)';
+
+        if (statusLabel === 'OPEN' || statusLabel === 'PENDING') {
+          statusLabel = 'MENUNGGU DISETUJUI';
+          statusColor = 'var(--orange)';
+        } else if (statusLabel === 'DISETUJUI') {
+          statusLabel = 'DISETUJUI';
+          statusColor = 'var(--green)';
+        } else if (statusLabel === 'DITOLAK') {
+          statusLabel = 'DITOLAK';
+          statusColor = 'var(--red)';
+        }
+
+        if (isUserLogged && isLoggedAdmin) {
+          if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
+            actions = `<div class="act-actions">
+              <button class="act-btn act-btn-success" onclick="event.stopPropagation(); valHumas('${h.id}', 'DISETUJUI')">Setujui</button>
+              <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); valHumas('${h.id}', 'DITOLAK')">Tolak</button>
+            </div>`;
+          }
+        } else {
+          if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
+            actions = `<div class="act-actions">
+              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}')">Edit</button>
+              <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHumas('${h.id}')">Hapus</button>
+            </div>`;
+          }
+        }
+
+        return `
+          <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%; cursor:pointer;" onclick="showDetailHumas('${h.id}')">
+            <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+              <div class="act-dot" style="background:${statusColor}"></div>
+              <div class="act-content" style="flex:1; min-width:0;">
+                <div class="act-title">${escHtml(h.namaKonten)}</div>
+                <div class="act-meta">${escHtml(h.namaPegawai)} · ${escHtml(h.platform)} · ${escHtml(h.jenisKonten)} · <span style="font-weight:700;color:${statusColor}">${statusLabel}</span></div>
+              </div>
             </div>
-          </div>
-          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
-            <div class="act-time">${formatShortDate(h.tanggalSubmit)}</div>
-            ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
-          </div>
-        </div>`;
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+              <div class="act-time" style="margin-bottom:0;">${formatShortDate(h.tanggalSubmit)}</div>
+              ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      return groupHeader + itemsHtml;
     }).join('');
   } 
   
@@ -1732,17 +1761,58 @@ async function selesaiBbm(id)     { await postAction({ action: "selesaiBbm", id_
 
 // ── User Actions (Edit & Delete) ──────────────
 function editHumas(id, nama, tanggal, link) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk mengubah konten Humas.");
+    return;
+  }
   document.getElementById('edit-hum-id').value = id;
   document.getElementById('edit-hum-nama').value = nama;
-  // Convert date format from YYYY-MM-DD
   document.getElementById('edit-hum-tanggal').value = tanggal;
   document.getElementById('edit-hum-link').value = link;
   openModal('edit-humas-modal');
 }
 async function deleteHumas(id) {
+  if (!currentUser) {
+    alert("Silakan login dengan Google terlebih dahulu untuk menghapus konten Humas.");
+    return;
+  }
   if (confirm("Apakah Anda yakin ingin menghapus konten humas ini?")) {
     await postAction({ action: "deleteHumas", id_konten: id });
   }
+}
+
+function showDetailHumas(id) {
+  const h = actHumas.find(item => item.id === id);
+  if (!h) return;
+  
+  document.getElementById("det-hum-id").textContent = h.id;
+  document.getElementById("det-hum-judul").textContent = h.namaKonten || "-";
+  document.getElementById("det-hum-nama").textContent = h.namaPegawai || "-";
+  document.getElementById("det-hum-bidang").textContent = h.bidang || "-";
+  document.getElementById("det-hum-platform").textContent = h.platform || "-";
+  document.getElementById("det-hum-jenis").textContent = h.jenisKonten || "-";
+  document.getElementById("det-hum-tgl-post").textContent = formatShortDate(h.tanggalPosting) || "-";
+  
+  const linkEl = document.getElementById("det-hum-link");
+  if (h.linkKonten) {
+    linkEl.href = h.linkKonten;
+    linkEl.textContent = h.linkKonten;
+    linkEl.style.display = "inline";
+  } else {
+    linkEl.href = "#";
+    linkEl.textContent = "-";
+  }
+  
+  const ssEl = document.getElementById("det-hum-ss");
+  if (h.screenshotUrl) {
+    ssEl.src = h.screenshotUrl;
+    ssEl.style.display = "block";
+  } else {
+    ssEl.src = "";
+    ssEl.style.display = "none";
+  }
+  
+  openModal("detail-humas-modal");
 }
 
 function editBbm(id, jenis, jumlah, tujuan) {
@@ -2489,6 +2559,54 @@ async function submitEditBooking(e) {
         </div>
         <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
       </form>
+    </div>
+  </div>
+  <!-- Modal Detail Humas -->
+  <div id="detail-humas-modal" class="modal-overlay">
+    <div class="modal-content-card" style="max-width: 550px;">
+      <button type="button" onclick="closeModal('detail-humas-modal')" class="modal-close-btn">✕</button>
+      <div class="modal-header-title">Detail Konten Humas</div>
+      
+      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: var(--text);">
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">ID Konten</span>
+          <span id="det-hum-id" style="font-family: var(--mono); font-weight: 700; color: var(--wave);"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Judul Konten</span>
+          <span id="det-hum-judul" style="font-weight: 700;"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Nama Pemohon</span>
+          <span id="det-hum-nama"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Bidang Kerja</span>
+          <span id="det-hum-bidang"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Platform</span>
+          <span id="det-hum-platform" style="font-weight: 600; color: var(--wave);"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Jenis Konten</span>
+          <span id="det-hum-jenis"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Tanggal Posting</span>
+          <span id="det-hum-tgl-post"></span>
+        </div>
+        <div style="display: grid; grid-template-columns: 120px 1fr; border-bottom: 1px dashed var(--border); padding-bottom: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Link Konten</span>
+          <a id="det-hum-link" href="#" target="_blank" style="color: var(--wave); font-weight: 600; text-decoration: underline; word-break: break-all;"></a>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+          <span style="color: var(--muted); font-weight: 600;">Bukti Screenshot / Posting:</span>
+          <div style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: var(--light); display: flex; justify-content: center; align-items: center; min-height: 150px; max-height: 300px;">
+            <img id="det-hum-ss" src="" alt="Screenshot Bukti" style="max-width: 100%; max-height: 300px; object-fit: contain;"/>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>
