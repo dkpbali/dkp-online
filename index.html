@@ -1399,12 +1399,12 @@ updateStats({ aset: totalAset, tiketOpen, bookingPending, bbmPending, kdrPending
     
   } catch (err) {
     console.error("loadStats processing error:", err);
-    updateStats({ aset: 0, tiketOpen: 0, bookingPending: 0, bbmPending: 0 });
+    updateStats({ aset: 0, tiketOpen: 0, bookingPending: 0, bbmPending: 0, kdrPending: 0 });
     
   }
 }
 
-function updateStats({ aset, tiketOpen, bookingPending, bbmPending }) {
+function updateStats({ aset, tiketOpen, bookingPending, bbmPending, kdrPending }) {
   document.getElementById("badge-aset").textContent      = `${aset} aset`;
   document.getElementById("badge-helpdesk").textContent  = tiketOpen > 0 ? `${tiketOpen} open` : "Semua clear";
   document.getElementById("badge-rapat").textContent     = bookingPending > 0 ? `${bookingPending} pending` : "Tersedia";
