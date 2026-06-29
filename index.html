@@ -13,6 +13,7 @@
 <style>
 :root {
   --ink:    #FFFFFF; --ink2: #F4F8FC; --ink3: #E8F1F7;
+  --card:   #FFFFFF;
   --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
   --foam:   #3399FF; --sand: #E6F2FF; --light: #F8FAFD;
   --text:   #1E293B; --muted:#64748B;
@@ -804,7 +805,7 @@ main { padding-bottom: 40px !important; }
 #gis-btn-container{flex-shrink:0;}
 #gis-btn-container>div{border-radius:8px!important;overflow:hidden;}
 #user-bar{display:none;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 14px;margin-bottom:16px;}
-#user-bar .user-name{font-weight:600;font-size:13px;color:var(--ink);}
+#user-bar .user-name{font-weight:600;font-size:13px;color:var(--text);}
 #user-bar .user-email{font-size:11px;color:var(--muted);}
 .btn-logout{margin-left:auto;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;}
 .btn-logout:hover{border-color:var(--red);color:var(--red);}
@@ -820,7 +821,7 @@ main { padding-bottom: 40px !important; }
 .modal-content-card{background:var(--card);border:1px solid var(--border);border-radius:16px;width:100%;max-width:500px;padding:20px;position:relative;box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);max-height:90vh;overflow-y:auto;}
 .modal-close-btn{position:absolute;top:16px;right:16px;background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
 .modal-close-btn:hover{color:var(--red);}
-.modal-header-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px;}
+.modal-header-title{font-size:16px;font-weight:700;color:var(--sea);margin-bottom:16px;}
 .modal-summary-card{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;font-size:12px;line-height:1.5;color:var(--text);}
 
 /* ── File Upload ── */
@@ -836,7 +837,7 @@ main { padding-bottom: 40px !important; }
 .preview-name{font-size:8px;color:var(--text);word-break:break-all;}
 
 /* Action Buttons */
-.act-actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.act-actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;margin-left:16px;}
 .act-btn{font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);transition:all .2s;}
 .act-btn:hover{background:var(--light);border-color:var(--border2);}
 .act-btn-primary{background:var(--wave);color:#fff;border-color:transparent;}
@@ -1490,16 +1491,18 @@ function renderActTab(tab) {
       const statusLabel = isStatusOpen ? 'BARU' : (isStatusApproved ? 'DISETUJUI' : t.status);
 
       return `
-        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
-          <div style="display:flex; width:100%; align-items:center; gap:8px;">
+        <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
+          <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
             <div class="act-dot" style="background:${badgeColor}"></div>
-            <div class="act-content">
+            <div class="act-content" style="flex:1; min-width:0;">
               <div class="act-title">${escHtml(t.judul)}</div>
               <div class="act-meta">${escHtml(t.nama)} · ${escHtml(t.bidang)} · <span style="font-weight:700;color:${badgeColor}">${statusLabel}</span></div>
             </div>
-            <div class="act-time">${formatShortDate(t.tanggal)}</div>
           </div>
-          ${actions}
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+            <div class="act-time">${formatShortDate(t.tanggal)}</div>
+            ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
+          </div>
         </div>`;
     }).join('');
   } 
@@ -1528,16 +1531,18 @@ function renderActTab(tab) {
       }
 
       return `
-        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
-          <div style="display:flex; width:100%; align-items:center; gap:8px;">
+        <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
+          <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
             <div class="act-dot dot-humas"></div>
-            <div class="act-content">
+            <div class="act-content" style="flex:1; min-width:0;">
               <div class="act-title">${escHtml(h.namaKonten)}</div>
               <div class="act-meta">${escHtml(h.namaPegawai)} · ${escHtml(h.platform)} · ${escHtml(h.jenisKonten)}</div>
             </div>
-            <div class="act-time">${formatShortDate(h.tanggalSubmit)}</div>
           </div>
-          ${actions}
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+            <div class="act-time">${formatShortDate(h.tanggalSubmit)}</div>
+            ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
+          </div>
         </div>`;
     }).join('');
   } 
@@ -1551,50 +1556,65 @@ function renderActTab(tab) {
       listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--muted);font-size:13px">Tidak ada permohonan BBM yang aktif.</div>';
       return;
     }
-    htmlStr = filteredBbmList.map(b => {
-      const isOwner = isUserLogged && (loggedPegId === b.id_pegawai);
-      const isStatusOpen = b.status.toUpperCase() === 'OPEN';
-      const isStatusApproved = b.status.toUpperCase() === 'DISETUJUI';
 
-      let actions = '';
-      let statusLabel = b.status;
-      let statusColor = 'var(--muted)';
+    const groups = {};
+    filteredBbmList.forEach(b => {
+      const bidang = b.bidang ? b.bidang.split(" - ")[0].toUpperCase().trim() : "LAINNYA";
+      if (!groups[bidang]) groups[bidang] = [];
+      groups[bidang].push(b);
+    });
 
-      if (isStatusOpen) {
-        statusLabel = 'MENUNGGU DISETUJUI';
-        statusColor = 'var(--orange)';
-        if (isUserLogged) {
-          if (isLoggedAdmin) {
-            actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
-          } else if (isOwner) {
-            actions = `<div class="act-actions">
-              <button class="act-btn" onclick="editBbm('${b.id_bbm}', '${b.jenis_voucher}', '${b.jumlah}', '${escHtml(b.lokasi_tujuan)}')">Edit</button>
-              <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}')">Hapus</button>
-            </div>`;
+    htmlStr = Object.entries(groups).map(([bidang, list], gIdx) => {
+      const marginStyle = gIdx > 0 ? 'margin-top:20px;' : 'margin-top:8px;';
+      const groupHeader = `<div style="font-size:11px; font-weight:700; color:var(--wave); ${marginStyle} margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed var(--border); padding-bottom:4px;">${bidang}</div>`;
+      
+      const itemsHtml = list.map(b => {
+        const isOwner = isUserLogged && (loggedPegId === b.id_pegawai);
+        const isStatusOpen = b.status.toUpperCase() === 'OPEN';
+        const isStatusApproved = b.status.toUpperCase() === 'DISETUJUI';
+
+        let actions = '';
+        let statusLabel = b.status;
+        let statusColor = 'var(--muted)';
+
+        if (isStatusOpen) {
+          statusLabel = 'MENUNGGU DISETUJUI';
+          statusColor = 'var(--orange)';
+          if (isUserLogged) {
+            if (isLoggedAdmin) {
+              actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
+            } else if (isOwner) {
+              actions = `<div class="act-actions">
+                <button class="act-btn" onclick="editBbm('${b.id_bbm}', '${b.jenis_voucher}', '${b.jumlah}', '${escHtml(b.lokasi_tujuan)}')">Edit</button>
+                <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}')">Hapus</button>
+              </div>`;
+            }
           }
-        }
-      } else if (isStatusApproved) {
-        statusLabel = 'BELUM DILAPORKAN';
-        statusColor = 'var(--yellow)';
-        if (isOwner) {
+        } else if (isStatusApproved) {
+          statusLabel = 'BELUM DILAPORKAN';
+          statusColor = 'var(--yellow)';
           actions = `<div class="act-actions"><button class="act-btn act-btn-primary" onclick="openLaporBbmModal('${b.id_bbm}', ${b.jumlah}, '${escHtml(b.nama_penerima)}', '${b.jenis_voucher}', '${escHtml(b.lokasi_tujuan)}')">Lapor Penggunaan</button></div>`;
-        } else if (isLoggedAdmin) {
-          actions = `<div class="act-actions"><span style="font-size:10px;color:var(--muted)">Menunggu Laporan Pengguna</span></div>`;
         }
-      }
 
-      return `
-        <div class="activity-item" style="flex-direction:column; align-items:flex-start; padding:12px 0;">
-          <div style="display:flex; width:100%; align-items:center; gap:8px;">
-            <div class="act-dot" style="background:${statusColor}"></div>
-            <div class="act-content">
-              <div class="act-title">${escHtml(b.nama_penerima)} · ${b.jenis_voucher} (${b.jumlah} Pcs)</div>
-              <div class="act-meta">${escHtml(b.bidang)} · Tujuan: ${escHtml(b.lokasi_tujuan)} · <span style="font-weight:700;color:${statusColor}">${statusLabel}</span></div>
+        const name = (b.nama_penerima || '').toUpperCase();
+
+        return `
+          <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
+            <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+              <div class="act-dot" style="background:${statusColor}"></div>
+              <div class="act-content" style="flex:1; min-width:0;">
+                <div class="act-title">${name} · ${escHtml(b.jenis_voucher)} (${b.jumlah} Pcs)</div>
+                <div class="act-meta">Tujuan: ${escHtml(b.lokasi_tujuan)} · <span style="font-weight:700;color:${statusColor}">${statusLabel}</span></div>
+              </div>
             </div>
-            <div class="act-time">${formatShortDate(b.tgl_submit)}</div>
-          </div>
-          ${actions}
-        </div>`;
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
+              <div class="act-time" style="margin-bottom:0;">${formatShortDate(b.tgl_submit)}</div>
+              ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
+            </div>
+          </div>`;
+      }).join('');
+
+      return groupHeader + itemsHtml;
     }).join('');
   }
 
@@ -1701,7 +1721,39 @@ function openLaporBbmModal(id, maxVouchers, penerima, jenis, tujuan) {
   // Clear any old files
   ['geotag', 'surat', 'laporan', 'nota'].forEach(clearRepFile);
   
+  // Reset and hide warning banner on load
+  updateReturnedInfo(maxVouchers, maxVouchers);
+  
   openModal('report-bbm-modal');
+}
+
+function validateReportedVouchers(input) {
+  const maxV = parseInt(document.getElementById("rep-max-vouchers").value) || 0;
+  let val = parseInt(input.value) || 0;
+  
+  if (val > maxV) {
+    alert(`Peringatan: Jumlah voucher dilaporkan (${val} pcs) tidak boleh melebihi kuota voucher diambil (${maxV} pcs)!`);
+    input.value = maxV;
+    val = maxV;
+  } else if (val < 0) {
+    input.value = 1;
+    val = 1;
+  }
+  
+  updateReturnedInfo(val, maxV);
+}
+
+function updateReturnedInfo(val, maxV) {
+  const warningEl = document.getElementById("rep-returned-warning");
+  if (!warningEl) return;
+  
+  if (val > 0 && val < maxV) {
+    const returnedQty = maxV - val;
+    warningEl.innerHTML = `⚠️ <strong>Pemberitahuan Pengembalian Voucher:</strong><br/>Anda melaporkan penggunaan <strong>${val} pcs</strong> voucher. Sisa <strong>${returnedQty} pcs</strong> voucher yang tidak digunakan wajib dikembalikan secara fisik ke Admin / Sekretariat.`;
+    warningEl.style.display = "block";
+  } else {
+    warningEl.style.display = "none";
+  }
 }
 
 // ── Submit Edit/Report Forms ──────────────────
@@ -2102,7 +2154,8 @@ async function submitEditBooking(e) {
         
         <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jumlah Voucher yang Digunakan (pcs) <span style="color:var(--red)">*</span></label>
-          <input type="number" id="f-rep-used" class="form-control" min="0" required/>
+          <input type="number" id="f-rep-used" class="form-control" min="0" oninput="validateReportedVouchers(this)" required/>
+          <div id="rep-returned-warning" style="display:none; font-size:11px; color:var(--yellow); background:rgba(202,138,4,0.08); border:1px solid rgba(202,138,4,0.15); border-radius:8px; padding:10px; margin-top:8px; line-height:1.4;"></div>
           <div style="font-size:10px;color:var(--muted);margin-top:4px;">Sisa voucher akan otomatis dikembalikan ke admin.</div>
         </div>
 
