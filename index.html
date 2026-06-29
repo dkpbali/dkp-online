@@ -988,7 +988,7 @@ main { padding-bottom: 40px !important; }
                 <span class="app-name">Helpdesk</span>
                 <span class="app-badge badge-count" id="badge-helpdesk">Memuat...</span>
               </div>
-              <div class="app-desc">Laporan kerusakan perangkat & IT support.</div>
+              <div class="app-desc">Laporan kerusakan barang &amp; perangkat kantor.</div>
             </div>
           </a>
           <a class="app-card app-card-rapat" href="rapat/index.html">
@@ -1555,28 +1555,9 @@ function renderActTab(tab) {
       return;
     }
     htmlStr = actHelpdesk.map(t => {
-      const isOwner = isUserLogged && (loggedPegId === t.idPelapor);
       const isStatusOpen = t.status.toUpperCase() === 'OPEN';
-      const isStatusApproved = t.status.toUpperCase() === 'DISETUJUI';
-      
-      let actions = '';
-      if (isUserLogged) {
-        if (isLoggedAdmin) {
-          if (isStatusOpen) {
-            actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valHelpdesk('${t.id}')">Validasi</button></div>`;
-          } else if (isStatusApproved) {
-            actions = `<div class="act-actions"><button class="act-btn act-btn-primary" onclick="selesaiHelpdesk('${t.id}')">Selesai</button></div>`;
-          }
-        } else if (isOwner && isStatusOpen) {
-          actions = `<div class="act-actions">
-            <button class="act-btn" onclick="editHelpdesk('${t.id}', '${escHtml(t.judul)}', '${escHtml(t.deskripsi)}')">Edit</button>
-            <button class="act-btn act-btn-danger" onclick="deleteHelpdesk('${t.id}')">Hapus</button>
-          </div>`;
-        }
-      }
-
       const badgeColor = isStatusOpen ? 'var(--orange)' : 'var(--wave)';
-      const statusLabel = isStatusOpen ? 'BARU' : (isStatusApproved ? 'DISETUJUI' : t.status);
+      const statusLabel = isStatusOpen ? 'BARU' : t.status;
 
       return `
         <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
@@ -1589,7 +1570,6 @@ function renderActTab(tab) {
           </div>
           <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex-shrink:0;">
             <div class="act-time">${formatShortDate(t.tanggal)}</div>
-            ${actions ? actions.replace('class="act-actions"', 'class="act-actions" style="margin-left:0; margin-top:0;"') : ''}
           </div>
         </div>`;
     }).join('');
@@ -1746,25 +1726,11 @@ async function postAction(payload) {
 }
 
 // ── Admin Actions ───────────────────────────
-async function valHelpdesk(id)   { await postAction({ action: "validateHelpdesk", id_tiket: id }); }
-async function selesaiHelpdesk(id) { await postAction({ action: "selesaiHelpdesk", id_tiket: id }); }
 async function valHumas(id, status){ await postAction({ action: "validateHumas", id_konten: id, status }); }
 async function valBbm(id)         { await postAction({ action: "validateBbm", id_bbm: id }); }
 async function selesaiBbm(id)     { await postAction({ action: "selesaiBbm", id_bbm: id }); }
 
 // ── User Actions (Edit & Delete) ──────────────
-function editHelpdesk(id, judul, deskripsi) {
-  document.getElementById('edit-hd-id').value = id;
-  document.getElementById('edit-hd-judul').value = judul;
-  document.getElementById('edit-hd-deskripsi').value = deskripsi;
-  openModal('edit-helpdesk-modal');
-}
-async function deleteHelpdesk(id) {
-  if (confirm("Apakah Anda yakin ingin menghapus tiket helpdesk ini?")) {
-    await postAction({ action: "deleteHelpdesk", id_tiket: id });
-  }
-}
-
 function editHumas(id, nama, tanggal, link) {
   document.getElementById('edit-hum-id').value = id;
   document.getElementById('edit-hum-nama').value = nama;
@@ -1919,15 +1885,6 @@ function onRepJenisKendaraanChange() {
 }
 
 // ── Submit Edit/Report Forms ──────────────────
-async function submitEditHelpdesk(e) {
-  e.preventDefault();
-  const id = document.getElementById('edit-hd-id').value;
-  const judul = document.getElementById('edit-hd-judul').value;
-  const deskripsi = document.getElementById('edit-hd-deskripsi').value;
-  closeModal('edit-helpdesk-modal');
-  await postAction({ action: "updateHelpdesk", id_tiket: id, judul, deskripsi });
-}
-
 async function submitEditHumas(e) {
   e.preventDefault();
   const id = document.getElementById('edit-hum-id').value;
@@ -2272,26 +2229,6 @@ async function submitEditBooking(e) {
   });
 }
 </script>
-
-  <!-- Modal Edit Helpdesk -->
-  <div id="edit-helpdesk-modal" class="modal-overlay">
-    <div class="modal-content-card">
-      <button type="button" onclick="closeModal('edit-helpdesk-modal')" class="modal-close-btn">✕</button>
-      <div class="modal-header-title">Edit Tiket Helpdesk</div>
-      <form id="edit-helpdesk-form" onsubmit="submitEditHelpdesk(event)">
-        <input type="hidden" id="edit-hd-id"/>
-        <div class="field" style="margin-bottom: 12px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Judul Masalah</label>
-          <input type="text" id="edit-hd-judul" class="form-control" required/>
-        </div>
-        <div class="field" style="margin-bottom: 16px;">
-          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Deskripsi Masalah</label>
-          <textarea id="edit-hd-deskripsi" class="form-control" style="min-height:80px;" required></textarea>
-        </div>
-        <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
-      </form>
-    </div>
-  </div>
 
   <!-- Modal Edit Humas -->
   <div id="edit-humas-modal" class="modal-overlay">

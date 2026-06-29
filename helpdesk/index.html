@@ -613,9 +613,9 @@ body.keyboard-open .more-drawer {
 
   <div class="bbm-hero">
     <div class="bbm-content">
-      <div class="bbm-eyebrow">HELPDESK IT</div>
-      <div class="bbm-title">Laporan &amp; Layanan IT</div>
-      <div class="bbm-sub">Silakan buat laporan kendala teknis IT atau pantau status penanganan tiket Anda di bawah ini.</div>
+      <div class="bbm-eyebrow">HELPDESK SARPRAS</div>
+      <div class="bbm-title">Laporan &amp; Layanan Sarpras</div>
+      <div class="bbm-sub">Silakan buat laporan kendala kerusakan barang/perangkat (IT, AC, TV, dsb) atau pantau status penanganan tiket Anda di bawah ini.</div>
     </div>
   </div>
 
@@ -630,7 +630,7 @@ body.keyboard-open .more-drawer {
     <div id="success-screen">
       <div class="suc-ring" style="display: inline-flex; align-items: center; justify-content: center;"><svg style="width: 24px; height: 24px; stroke: var(--green); fill: none; stroke-width: 3;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h2>Laporan Terkirim!</h2>
-      <p>Tim IT DKP Bali sudah diberitahu.<br/>Simpan nomor tiket Anda:</p>
+      <p>Tim DKP Bali sudah diberitahu.<br/>Simpan nomor tiket Anda:</p>
       <div class="tiket-badge" id="result-tiket-id">TKT-0000</div>
       <p style="font-size:11px;color:var(--muted)">
         Nomor tiket ini dikirim ke admin via Telegram. Pantau status di Beranda.
@@ -664,13 +664,10 @@ body.keyboard-open .more-drawer {
       <div class="divider">Detail Kerusakan</div>
 
       <div class="form-grid">
-        <!-- Pilihan Aset -->
+        <!-- Nama Barang/Perangkat -->
         <div class="field">
-          <label>Aset IT Kantor</label>
-          <select id="f-aset" onchange="onAsetChange()">
-            <option value="">- Pilih Aset (jika ada) -</option>
-          </select>
-          <div class="aset-chip" id="aset-chip"></div>
+          <label>Nama Barang/Perangkat <span class="req">*</span></label>
+          <input type="text" id="f-aset" placeholder="Contoh: AC Aula, TV Lobby, Laptop IT, dsb" required/>
         </div>
 
         <div class="field">
@@ -783,7 +780,6 @@ const CFG = {
 
 // ── State ───────────────────────────────────
 let allPegawai   = [];
-let allAset      = [];
 let fotoB64      = null;
 let hasFoto      = false;
 
@@ -818,30 +814,6 @@ async function loadPegawai() {
   } catch (e) { console.error(e); }
 }
 
-// ── Load Aset ───────────────────────────────
-async function loadAset() {
-  try {
-    if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
-      allAset = [
-        { kode:"TI-0001", nama:"Laptop Acer TravelMate P214", pengguna:"P0001", idLokasi:"L002", kondisi:"BAIK", tipe:"PERSONAL" },
-        { kode:"TI-0002", nama:"Laptop Lenovo ThinkPad E14",  pengguna:"P0002", idLokasi:"L002", kondisi:"BAIK", tipe:"PERSONAL" },
-        { kode:"TI-0003", nama:"Printer Epson M15140",        pengguna:"P0000", idLokasi:"L002", kondisi:"BAIK", tipe:"BERSAMA" },
-      ];
-    } else {
-      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getAsetList`);
-      const json = await res.json();
-      if (json.success) allAset = json.data.map(a => ({
-        kode: a.KODE_ASET,
-        nama: a.NAMA_BARANG,
-        pengguna: a.ID_PENGGUNA,
-        idLokasi: a.ID_LOKASI,
-        kondisi: a.KONDISI,
-        tipe: a.TIPE_PENGGUNAAN
-      }));
-    }
-  } catch (e) { console.error(e); }
-}
-
 // ── Pegawai change ──────────────────────────
 function onPegawaiChange() {
   const id  = document.getElementById("f-pegawai").value;
@@ -850,57 +822,10 @@ function onPegawaiChange() {
   const val = document.getElementById("val-bidang");
 
   if (peg) {
-    // Tampilkan lokasi kerja (bukan bidang)
     val.textContent = peg.lokasiKerja || peg.bidang || "-";
     el.classList.add("show");
   } else {
     el.classList.remove("show");
-  }
-
-  // Filter aset: tampilkan aset PERSONAL milik pegawai ini
-  // + aset BERSAMA yang ada di lokasi kerja pegawai ini
-  const sel = document.getElementById("f-aset");
-  sel.innerHTML = '<option value="">- Pilih Aset (jika ada) -</option>';
-
-  if (id && peg) {
-    const filtered = allAset.filter(a =>
-      // Aset personal milik pegawai ini
-      (a.tipe === "PERSONAL" && a.pengguna === id) ||
-      // Aset bersama di lokasi kerja pegawai ini
-      (a.tipe === "BERSAMA" && a.idLokasi === peg.idLokasi)
-    );
-    filtered.forEach(a => {
-      const o = document.createElement("option");
-      o.value = a.kode;
-      const tipeLabel = a.tipe === "BERSAMA" ? " (Bersama)" : "";
-      o.textContent = `${a.kode} - ${a.nama}${tipeLabel}`;
-      sel.appendChild(o);
-    });
-    
-    // Wajib menampilkan opsi LAINNYA
-    const oLain = document.createElement("option");
-    oLain.value = "LAINNYA";
-    oLain.textContent = "LAINNYA (Barang Pribadi / Lainnya)";
-    sel.appendChild(oLain);
-  }
-
-  document.getElementById("aset-chip").classList.remove("show");
-}
-
-function onAsetChange() {
-  const kode  = document.getElementById("f-aset").value;
-  const chip  = document.getElementById("aset-chip");
-  if (kode === "LAINNYA") {
-    chip.innerHTML = `<strong>Barang Pribadi / Lainnya</strong> &nbsp;·&nbsp; Kondisi: -`;
-    chip.classList.add("show");
-    return;
-  }
-  const aset  = allAset.find(a => a.kode === kode);
-  if (aset && kode) {
-    chip.innerHTML = `<strong>${aset.nama}</strong> &nbsp;·&nbsp; Kondisi: ${aset.kondisi}`;
-    chip.classList.add("show");
-  } else {
-    chip.classList.remove("show");
   }
 }
 
@@ -1078,19 +1003,6 @@ function filterTiket() {
 
 
 
-// ── Preload aset param dari URL ─────────────
-function checkAsetParam() {
-  const asetKode = new URLSearchParams(window.location.search).get("aset");
-  if (!asetKode) return;
-  // Tunggu aset list loaded, lalu set dropdown
-  const trySet = () => {
-    const sel = document.getElementById("f-aset");
-    const opt = [...sel.options].find(o => o.value === asetKode);
-    if (opt) { sel.value = asetKode; onAsetChange(); }
-  };
-  setTimeout(trySet, 1500);
-}
-
 // ── Autocomplete Helper ───────────────────────
 function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback) {
   const searchInput = document.getElementById(inputId);
@@ -1161,10 +1073,7 @@ if (tabParam === "status") {
 }
 
 (async () => {
-  await Promise.all([loadPegawai(), loadAset()]);
-  checkAsetParam();
-
-
+  await loadPegawai();
 })();
 
 // Keyboard visual viewport handler
