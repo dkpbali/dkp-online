@@ -868,13 +868,13 @@ main { padding-bottom: 40px !important; }
 /* Action Buttons */
 .act-actions{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;margin-left:16px;}
 .act-btn{font-size:10px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);transition:all .2s;}
-.act-btn:hover{background:var(--light);border-color:var(--border2);}
+.act-btn:hover{background:var(--light);border-color:var(--border2);color:var(--text);}
 .act-btn-primary{background:var(--wave);color:#fff;border-color:transparent;}
-.act-btn-primary:hover{background:var(--sea);color:#fff;}
+.act-btn-primary:hover{background:var(--sea);color:#fff;border-color:transparent;}
 .act-btn-danger{background:var(--red);color:#fff;border-color:transparent;}
-.act-btn-danger:hover{opacity:.9;}
+.act-btn-danger:hover{background:var(--red);color:#fff;border-color:transparent;opacity:.9;}
 .act-btn-success{background:var(--green);color:#fff;border-color:transparent;}
-.act-btn-success:hover{opacity:.9;}
+.act-btn-success:hover{background:var(--green);color:#fff;border-color:transparent;opacity:.9;}
 
 .form-control {
   width: 100%;
@@ -2079,8 +2079,8 @@ function renderSelectedDayBookings(dateStr, bookings) {
     <div style="display:flex; flex-direction:column; gap:8px;">
       ${bookings.map(b => {
         const actionsHtml = `
-          <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start;">
-            <button class="act-btn" onclick="editBookingHome('${b.id}')">Edit</button>
+          <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start; margin-left: 0;">
+            <button class="act-btn act-btn-primary" onclick="editBookingHome('${b.id}')">Edit</button>
             <button class="act-btn act-btn-danger" onclick="cancelBookingHome('${b.id}')">Hapus</button>
           </div>
         `;
