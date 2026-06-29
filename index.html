@@ -1725,12 +1725,43 @@ function openLaporBbmModal(id, maxVouchers, penerima, jenis, tujuan) {
   document.getElementById('f-rep-used').max = maxVouchers;
   document.getElementById('f-rep-used').value = maxVouchers;
   
+  const isStok = (tujuan === "STOK INTERNAL");
+  
   document.getElementById('report-summary-info').innerHTML = `
     <strong>ID BBM:</strong> ${id}<br/>
     <strong>Penerima:</strong> ${penerima}<br/>
     <strong>Voucher:</strong> ${jenis} (${maxVouchers} Pcs)<br/>
-    <strong>Tujuan:</strong> ${tujuan}
+    ${isStok ? '<strong style="color:var(--yellow)">Tipe: Pengambilan Stok Cadangan (Tugas Mendadak)</strong>' : `<strong>Tujuan:</strong> ${tujuan}`}
   `;
+  
+  // Toggle stok cadangan fields visibility
+  const stokFields = document.getElementById("rep-stok-adjust-fields");
+  if (isStok) {
+    stokFields.style.display = "flex";
+    document.getElementById("f-rep-tanggal").required = true;
+    document.getElementById("f-rep-lokasi").required = true;
+    document.getElementById("f-rep-kecamatan").required = true;
+    document.getElementById("f-rep-jenis-kendaraan").required = true;
+    document.getElementById("f-rep-nopol").required = true;
+    document.getElementById("f-rep-deskripsi").required = true;
+    
+    // reset values
+    document.getElementById("f-rep-tanggal").value = "";
+    document.getElementById("f-rep-lokasi").value = "";
+    document.getElementById("f-rep-kecamatan").value = "";
+    document.getElementById("f-rep-jenis-kendaraan").value = "dinas";
+    onRepJenisKendaraanChange();
+    document.getElementById("f-rep-nopol").value = "";
+    document.getElementById("f-rep-deskripsi").value = "";
+  } else {
+    stokFields.style.display = "none";
+    document.getElementById("f-rep-tanggal").required = false;
+    document.getElementById("f-rep-lokasi").required = false;
+    document.getElementById("f-rep-kecamatan").required = false;
+    document.getElementById("f-rep-jenis-kendaraan").required = false;
+    document.getElementById("f-rep-nopol").required = false;
+    document.getElementById("f-rep-deskripsi").required = false;
+  }
   
   // Clear any old files
   ['geotag', 'surat', 'laporan', 'nota'].forEach(clearRepFile);
@@ -1767,6 +1798,36 @@ function updateReturnedInfo(val, maxV) {
     warningEl.style.display = "block";
   } else {
     warningEl.style.display = "none";
+  }
+}
+
+function onRepJenisKendaraanChange() {
+  const type = document.getElementById("f-rep-jenis-kendaraan").value;
+  const nopolSelect = document.getElementById("f-rep-nopol");
+  const lblNopol = document.getElementById("lbl-rep-nopol");
+  
+  if (type === "pribadi") {
+    lblNopol.innerHTML = 'Tipe Kendaraan Pribadi <span style="color:var(--red)">*</span>';
+    nopolSelect.innerHTML = `
+      <option value="" disabled selected>-- Pilih Tipe Kendaraan --</option>
+      <option value="Pribadi - Motor">Motor</option>
+      <option value="Pribadi - Mobil">Mobil</option>
+    `;
+  } else {
+    lblNopol.innerHTML = 'Nomor Polisi Kendaraan <span style="color:var(--red)">*</span>';
+    nopolSelect.innerHTML = `
+      <option value="" disabled selected>-- Pilih Nomor Polisi --</option>
+      <option value="DK 39">DK 39</option>
+      <option value="DK 420 I">DK 420 I</option>
+      <option value="DK 421 I">DK 421 I</option>
+      <option value="DK 1702 B">DK 1702 B</option>
+      <option value="DK 423 I">DK 423 I</option>
+      <option value="DK 1829 A">DK 1829 A</option>
+      <option value="DK 1657 A">DK 1657 A</option>
+      <option value="DK 8255 D">DK 8255 D</option>
+      <option value="DK 7030 D">DK 7030 D</option>
+      <option value="DK 1476 D">DK 1476 D</option>
+    `;
   }
 }
 
@@ -1830,6 +1891,23 @@ async function submitBbmReport(e) {
     dokumen_laporan_base64: filesData.laporan.base64,
     nota_bensin_base64: filesData.nota.base64
   };
+
+  if (document.getElementById("rep-stok-adjust-fields").style.display === "flex") {
+    payload.lokasi_tujuan = document.getElementById("f-rep-lokasi").value;
+    payload.kecamatan = document.getElementById("f-rep-kecamatan").value.trim();
+    payload.tgl_kegiatan = document.getElementById("f-rep-tanggal").value;
+    payload.deskripsi_kegiatan = document.getElementById("f-rep-deskripsi").value.trim();
+    
+    const repJenisKendaraan = document.getElementById("f-rep-jenis-kendaraan").value;
+    let repNopol = document.getElementById("f-rep-nopol").value;
+    let repPribadi = "-";
+    if (repJenisKendaraan === "pribadi") {
+      repPribadi = repNopol.replace("Pribadi - ", "");
+      repNopol = "-";
+    }
+    payload.nopol_kendaraan = repNopol;
+    payload.pribadi = repPribadi;
+  }
 
   try {
     await postAction(payload);
@@ -2178,6 +2256,67 @@ async function submitEditBooking(e) {
           <input type="number" id="f-rep-used" class="form-control" min="0" oninput="validateReportedVouchers(this)" required/>
           <div id="rep-returned-warning" style="display:none; font-size:11px; color:var(--yellow); background:rgba(202,138,4,0.08); border:1px solid rgba(202,138,4,0.15); border-radius:8px; padding:10px; margin-top:8px; line-height:1.4;"></div>
           <div style="font-size:10px;color:var(--muted);margin-top:4px;">Sisa voucher akan otomatis dikembalikan ke admin.</div>
+        </div>
+
+        <!-- Extra Fields for Stok Internal / Tugas Mendadak -->
+        <div id="rep-stok-adjust-fields" style="display: none; flex-direction: column; gap: 12px; margin-top: 16px; border-top: 1px dashed var(--border); padding-top: 16px;">
+          <div style="font-size:12px; font-weight:700; color:var(--wave); margin-bottom:4px;">Lengkapi Detail Kegiatan (Stok Cadangan)</div>
+          
+          <div class="field">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Kegiatan <span style="color:var(--red)">*</span></label>
+            <input type="date" id="f-rep-tanggal" class="form-control"/>
+          </div>
+          
+          <div class="field">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Lokasi Tujuan <span style="color:var(--red)">*</span></label>
+            <select id="f-rep-lokasi" class="form-control">
+              <option value="" disabled selected>-- Pilih Kabupaten/Kota --</option>
+              <option value="Kota Denpasar">Kota Denpasar</option>
+              <option value="Kabupaten Badung">Kabupaten Badung</option>
+              <option value="Kabupaten Bangli">Kabupaten Bangli</option>
+              <option value="Kabupaten Buleleng">Kabupaten Buleleng</option>
+              <option value="Kabupaten Gianyar">Kabupaten Gianyar</option>
+              <option value="Kabupaten Jembrana">Kabupaten Jembrana</option>
+              <option value="Kabupaten Karangasem">Kabupaten Karangasem</option>
+              <option value="Kabupaten Klungkung">Kabupaten Klungkung</option>
+              <option value="Kabupaten Tabanan">Kabupaten Tabanan</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Kecamatan <span style="color:var(--red)">*</span></label>
+            <input type="text" id="f-rep-kecamatan" class="form-control" placeholder="Contoh: Baturiti"/>
+          </div>
+          
+          <div class="field">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Kendaraan <span style="color:var(--red)">*</span></label>
+            <select id="f-rep-jenis-kendaraan" class="form-control" onchange="onRepJenisKendaraanChange()">
+              <option value="dinas">Kendaraan Dinas</option>
+              <option value="pribadi">Kendaraan Pribadi</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label id="lbl-rep-nopol" style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Nomor Polisi Kendaraan <span style="color:var(--red)">*</span></label>
+            <select id="f-rep-nopol" class="form-control">
+              <option value="" disabled selected>-- Pilih Nomor Polisi --</option>
+              <option value="DK 39">DK 39</option>
+              <option value="DK 420 I">DK 420 I</option>
+              <option value="DK 421 I">DK 421 I</option>
+              <option value="DK 1702 B">DK 1702 B</option>
+              <option value="DK 423 I">DK 423 I</option>
+              <option value="DK 1829 A">DK 1829 A</option>
+              <option value="DK 1657 A">DK 1657 A</option>
+              <option value="DK 8255 D">DK 8255 D</option>
+              <option value="DK 7030 D">DK 7030 D</option>
+              <option value="DK 1476 D">DK 1476 D</option>
+            </select>
+          </div>
+          
+          <div class="field">
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Deskripsi Kegiatan <span style="color:var(--red)">*</span></label>
+            <textarea id="f-rep-deskripsi" class="form-control" rows="3" placeholder="Jelaskan secara rinci kegiatan dinas lapangan Anda..."></textarea>
+          </div>
         </div>
 
         <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:10px;margin-top:16px;">Unggah Dokumen Bukti Dukung</div>
