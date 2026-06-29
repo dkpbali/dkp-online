@@ -900,7 +900,7 @@ async function submitLaporan(e) {
     id_pelapor:     pegId,
     nama_pelapor:   peg?.nama    || "",
     lokasi_pelapor:  peg?.lokasiKerja  || peg?.bidang || "",
-    kode_aset:      document.getElementById("f-aset").value,
+    nama_barang:    document.getElementById("f-aset").value.trim(),
     judul:          document.getElementById("f-judul").value,
     deskripsi:      document.getElementById("f-deskripsi").value,
     foto_base64:    fotoB64,
