@@ -11,6 +11,7 @@
 
 # Internal Reference Documents (not for public repo)
 references/
+README.md
 
 # Python Bytecode Cache
 __pycache__/

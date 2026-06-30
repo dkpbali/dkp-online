@@ -79,6 +79,14 @@ const UI = {
 
   // ── Header, Sidebar & Bottom Navigation Injector ──
   renderNavigation(activeTab = "") {
+    const isRoot = !window.location.pathname.includes("/aset/") &&
+                   !window.location.pathname.includes("/helpdesk/") &&
+                   !window.location.pathname.includes("/rapat/") &&
+                   !window.location.pathname.includes("/humas/") &&
+                   !window.location.pathname.includes("/bbm/") &&
+                   !window.location.pathname.includes("/kendaraan/") &&
+                   !window.location.pathname.includes("/dashboard/");
+
     let rootPath = "./";
     if (window.location.pathname.includes("/dashboard/dashboard_")) {
       rootPath = "../../";
