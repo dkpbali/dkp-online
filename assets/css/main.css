@@ -48,6 +48,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+main {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 100px;
+}
+
 /* ── SVG ICONS ── */
 .svg-icon {
   width: 20px;
