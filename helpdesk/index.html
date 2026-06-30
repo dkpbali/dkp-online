@@ -925,13 +925,13 @@ async function submitLaporan(e) {
 
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.textContent = "⏳ Menyimpan...";
+  btn.innerHTML = '<span class="spin" style="border-top-color:#fff; display:inline-block; vertical-align:middle; margin-right:8px; width:16px; height:16px;"></span><span>Menyimpan...</span>';
 
   const pegId  = document.getElementById("f-pegawai").value;
   if (!pegId) {
     alert("Pilih nama Pegawai dari daftar yang muncul saat mengetik.");
     btn.disabled = false;
-    btn.textContent = editingHelpdeskId ? "Simpan Perubahan" : "Kirim Laporan";
+    btn.innerHTML = editingHelpdeskId ? "<span>Simpan Perubahan</span>" : "<span>Kirim Laporan</span>";
     return;
   }
   const peg    = allPegawai.find(p => p.id === pegId);
@@ -941,7 +941,8 @@ async function submitLaporan(e) {
   if (editingHelpdeskId) {
     if (!currentUser) {
       alert("Login Google diperlukan untuk menyimpan perubahan.");
-      btn.disabled = false; btn.textContent = "Simpan Perubahan";
+      btn.disabled = false; 
+      btn.innerHTML = "<span>Simpan Perubahan</span>";
       return;
     }
     payload = {
@@ -995,7 +996,7 @@ async function submitLaporan(e) {
   } catch (err) {
     alert("Gagal mengirim: " + err.message);
     btn.disabled = false;
-    btn.textContent = editingHelpdeskId ? "Simpan Perubahan" : "Kirim Laporan";
+    btn.innerHTML = editingHelpdeskId ? "<span>Simpan Perubahan</span>" : "<span>Kirim Laporan</span>";
   }
 }
 

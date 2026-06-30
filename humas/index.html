@@ -1065,13 +1065,14 @@ async function submitHumas(e) {
   }
 
   const btn = document.getElementById("btn-submit");
-  btn.disabled = true; btn.textContent = "⏳ Menyimpan...";
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="border-top-color:#fff; display:inline-block; vertical-align:middle; margin-right:8px; width:16px; height:16px;"></span><span>Menyimpan...</span>';
 
   const pegId  = document.getElementById("f-pegawai").value;
   if (!pegId) {
     alert("Pilih nama Anda dari daftar yang muncul saat mengetik.");
     btn.disabled = false;
-    btn.textContent = editingHumasId ? "Simpan Perubahan" : "Kirim untuk Divalidasi";
+    btn.innerHTML = editingHumasId ? "<span>Simpan Perubahan</span>" : "<span>Kirim untuk Divalidasi</span>";
     return;
   }
   const peg    = allPegawai.find(p => p.id === pegId);
@@ -1081,7 +1082,8 @@ async function submitHumas(e) {
   if (editingHumasId) {
     if (!currentUser) {
       alert("Login Google diperlukan untuk menyimpan perubahan.");
-      btn.disabled = false; btn.textContent = "Simpan Perubahan";
+      btn.disabled = false; 
+      btn.innerHTML = "<span>Simpan Perubahan</span>";
       return;
     }
     payload = {
@@ -1137,7 +1139,7 @@ async function submitHumas(e) {
   } catch(err) {
     alert("Gagal: " + err.message);
     btn.disabled = false;
-    btn.textContent = editingHumasId ? "Simpan Perubahan" : "Kirim untuk Divalidasi";
+    btn.innerHTML = editingHumasId ? "<span>Simpan Perubahan</span>" : "<span>Kirim untuk Divalidasi</span>";
   }
 }
 
