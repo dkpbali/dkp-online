@@ -3,12 +3,13 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v12";
+const CACHE_NAME = "aruniwaves-v13";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [
   "./",
   "index.html",
+  "shared.css",
   "manifest.json",
   "aset/index.html",
   "aset/qr.html",
