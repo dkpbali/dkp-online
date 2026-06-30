@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8"/>
@@ -13,6 +13,328 @@
 <link rel="stylesheet" href="../../assets/css/component.css">
 <link rel="stylesheet" href="../../assets/css/form.css">
 <link rel="stylesheet" href="../../assets/css/table.css">
+<style>
+
+:root {
+  --ink:    #FFFFFF; --ink2: #0E1A2B; --ink3: #16253B;
+  --sea:    #0055AA; --sea2: #004488; --wave: #0077E6;
+  --foam:   #3399FF; --sand: #0B192C; --light: #061120;
+  --text:   #F4F8FC; --muted:#94A3B8;
+  --border: #2E3E56; --border2:#475B7A;
+  --green:  #0D9488; --yellow:#CA8A04; --red:#DC2626;
+  --sans: 'Inter', sans-serif; --title-sans: 'Outfit', sans-serif; --mono: 'Fira Code', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--light);color:var(--text);
+  font-family:var(--sans);min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;
+}
+
+/* â”€â”€ SITE HEADER â”€â”€ */
+.site-header{
+  position:sticky;top:0;z-index:200;
+  background:rgba(6,17,32,.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;height:56px;
+  display:flex;align-items:center;gap:12px;
+}
+.logo-wrap{display:flex;align-items:center;gap:10px;flex:1;text-decoration:none}
+.logo-mark{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sea),var(--wave));
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg { stroke: #fff !important; }
+.logo-name{font-family:var(--title-sans);font-size:13px;font-weight:800;letter-spacing:-.01em;color:var(--text)}
+.logo-sub{font-size:8px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+.btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+
+main {
+  flex: 1;
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+
+.card {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 24px 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-state {
+  display: none;
+  text-align: center;
+}
+.auth-state.active {
+  display: block;
+}
+
+.auth-title {
+  font-family: var(--title-sans);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.auth-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 8px;
+}
+.form-control {
+  width: 100%;
+  background: var(--ink2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 10px 12px;
+  transition: all .2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--wave);
+  box-shadow: 0 0 0 3px rgba(0,119,230,0.15);
+}
+
+/* â”€â”€ CAMERA / FILE INPUT â”€â”€ */
+.file-upload-box {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.01);
+  transition: all .2s;
+  position: relative;
+}
+.file-upload-box:hover {
+  border-color: var(--wave);
+  background: rgba(0,119,230,0.02);
+}
+.file-upload-icon {
+  font-size: 24px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: block;
+}
+.file-upload-text {
+  font-size: 12px;
+  font-weight: 600;
+}
+.file-upload-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+#file-input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.image-preview-container {
+  display: none;
+  margin-top: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  position: relative;
+  max-height: 220px;
+  background: #000;
+}
+.image-preview {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  display: block;
+}
+.btn-remove-preview {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(220,38,38,0.85);
+  border: none;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--border);
+  object-fit: cover;
+}
+.user-details {
+  flex: 1;
+  min-width: 0;
+}
+.user-name {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.user-email {
+  font-size: 10px;
+  color: var(--muted);
+}
+.btn-logout {
+  background: none;
+  border: none;
+  color: var(--red);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--sea), var(--wave));
+  border: none;
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-submit:hover { opacity: 0.95; }
+.btn-submit:disabled { background: var(--border); cursor: not-allowed; opacity: 0.6; }
+
+/* â”€â”€ LOADING SCREEN â”€â”€ */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(6,17,32,0.85);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 24px;
+  text-align: center;
+}
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3.5px solid rgba(255,255,255,0.06);
+  border-top-color: var(--wave);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-title {
+  font-family: var(--title-sans);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.loading-desc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+/* â”€â”€ TOAST â”€â”€ */
+.toast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50px);
+  z-index: 1500;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+
+</style>
 </head>
 <body>
 
@@ -28,7 +350,7 @@
 
     <!-- State 2: Login Required -->
     <div id="state-login" class="auth-state">
-      <span style="font-size:40px; margin-bottom:12px; display:block;">🔒</span>
+      <span style="font-size:40px; margin-bottom:12px; display:block;">ðŸ”’</span>
       <h2 class="auth-title">Akses Khusus Internal</h2>
       <p class="auth-desc">Formulir verifikasi ini hanya boleh diakses oleh Petugas Lapangan DKP Provinsi Bali yang terdaftar.</p>
       <div id="gsi-btn-container"></div>
@@ -36,7 +358,7 @@
 
     <!-- State 3: Denied Access -->
     <div id="state-denied" class="auth-state">
-      <span style="font-size:40px; margin-bottom:12px; display:block; color:var(--red);">⚠️</span>
+      <span style="font-size:40px; margin-bottom:12px; display:block; color:var(--red);">âš ï¸</span>
       <h2 class="auth-title" style="color:var(--red);">Akses Ditolak</h2>
       <p id="denied-email-msg" class="auth-desc"></p>
       <button class="btn-submit" onclick="resetAuth()" style="background:var(--ink3); border:1px solid var(--border); color:var(--text);">Masuk dengan Akun Lain</button>
@@ -66,7 +388,7 @@
         <div class="form-group">
           <label class="form-label" id="lbl-foto">Foto Kondisi Perairan</label>
           <div class="file-upload-box" id="upload-box">
-            <span class="file-upload-icon">📷</span>
+            <span class="file-upload-icon">ðŸ“·</span>
             <span class="file-upload-text">Ambil Foto / Upload Gambar</span>
             <span class="file-upload-sub" id="lbl-upload-sub">Gunakan kamera HP langsung di lokasi</span>
             <input type="file" id="file-input" accept="image/*" capture="environment" required/>
@@ -108,3 +430,4 @@
 <script src="../../assets/js/dashboard_ews_verifikasi.js"></script>
 </body>
 </html>
+

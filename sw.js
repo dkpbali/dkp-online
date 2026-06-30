@@ -3,7 +3,7 @@
 // File ini di-taruh di root folder (sama level dengan index.html)
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_NAME = "aruniwaves-v17";
+const CACHE_NAME = "aruniwaves-v18";
 
 // File yang di-cache untuk offline
 const PRECACHE_URLS = [

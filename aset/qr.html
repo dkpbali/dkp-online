@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8"/>
@@ -13,7 +13,30 @@
 <link rel="stylesheet" href="../assets/css/component.css">
 <link rel="stylesheet" href="../assets/css/form.css">
 <link rel="stylesheet" href="../assets/css/table.css">
-<style>/* ── CUSTOM SCROLLBAR ── */
+<style>
+:root {
+  --ink:      #FFFFFF;
+  --ink2:     #F4F8FC;
+  --ink3:     #E8F1F7;
+  --sea:      #0055AA;
+  --sea2:     #004488;
+  --wave:     #0077E6;
+  --foam:     #3399FF;
+  --text:     #1E293B;
+  --muted:    #64748B;
+  --border:   #CBD5E1;
+  --border2:  #94A3B8;
+  --green:    #0D9488;
+  --yellow:   #CA8A04;
+  --red:      #DC2626;
+  --mono:     'Fira Code', monospace;
+  --sans:     'Inter', sans-serif;
+  --title-sans: 'Outfit', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--text);font-family:var(--sans);min-height:100vh}
+
+/* â”€â”€ CUSTOM SCROLLBAR â”€â”€ */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -29,7 +52,7 @@
   background: var(--wave);
 }
 
-/* ── SVG ICONS ── */
+/* â”€â”€ SVG ICONS â”€â”€ */
 .svg-icon {
   width: 20px;
   height: 20px;
@@ -42,7 +65,7 @@
   vertical-align: middle;
 }
 
-/* ── NAVBAR ── */
+/* â”€â”€ NAVBAR â”€â”€ */
 nav.topnav{
   position:sticky;top:0;z-index:200;
   background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
@@ -80,7 +103,7 @@ nav.topnav{
   border-color: var(--border2);
 }
 
-/* ── BOTTOM NAV ── */
+/* â”€â”€ BOTTOM NAV â”€â”€ */
 .bottom-nav{
   position:fixed;bottom:0;left:0;right:0;z-index:100;
   background:rgba(255,255,255,.95);backdrop-filter:blur(16px);
@@ -107,7 +130,7 @@ body.keyboard-open .more-drawer {
   display: none !important;
 }
 
-/* ── MORE DRAWER ── */
+/* â”€â”€ MORE DRAWER â”€â”€ */
 .more-drawer{
   position:fixed;bottom:64px;left:0;right:0;z-index:150;
   background:var(--ink2);border-top:1px solid var(--border);
@@ -126,7 +149,7 @@ body.keyboard-open .more-drawer {
 
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
-/* ── SCREEN STYLES ── */
+/* â”€â”€ SCREEN STYLES â”€â”€ */
 main {
   max-width: 480px;
   margin: 0 auto;
@@ -537,7 +560,7 @@ tr:hover {
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── PRINT STYLES ── */
+/* â”€â”€ PRINT STYLES â”€â”€ */
 @media print {
   body *{visibility:hidden}
   #print-area,#print-area *{visibility:visible}
@@ -833,18 +856,18 @@ tr:hover {
     <div class="size-opts">
       <div class="size-opt selected" data-cols="4" onclick="selectSize(this)">
         <div class="size-opt-name">4 per baris</div>
-        <div class="size-opt-desc">Kecil · banyak per halaman</div>
+        <div class="size-opt-desc">Kecil Â· banyak per halaman</div>
       </div>
       <div class="size-opt" data-cols="3" onclick="selectSize(this)">
         <div class="size-opt-name">3 per baris</div>
-        <div class="size-opt-desc">Sedang · mudah dibaca</div>
+        <div class="size-opt-desc">Sedang Â· mudah dibaca</div>
       </div>
       <div class="size-opt" data-cols="2" onclick="selectSize(this)">
         <div class="size-opt-name">2 per baris</div>
-        <div class="size-opt-desc">Besar · mudah di-scan</div>
+        <div class="size-opt-desc">Besar Â· mudah di-scan</div>
       </div>
     </div>
-    <div id="qr-gen-error" style="display:none;color:var(--red);font-size:12px;text-align:center;padding:8px 4px;font-family:var(--mono);">⚠ Pilih minimal 1 aset terlebih dahulu.</div>
+    <div id="qr-gen-error" style="display:none;color:var(--red);font-size:12px;text-align:center;padding:8px 4px;font-family:var(--mono);">âš  Pilih minimal 1 aset terlebih dahulu.</div>
     <button class="btn btn-primary" style="width:100%;padding:12px;font-size:14px" onclick="generateQR()">
       <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
       Generate QR Code
@@ -938,7 +961,7 @@ let printCols    = 4;
 
 const $ = id => document.getElementById(id);
 
-// ── Load aset ──────────────────────────────────
+// â”€â”€ Load aset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadAset() {
   try {
     const json = await API.get("getAsetList");
@@ -989,7 +1012,7 @@ function buildFilters() {
   });
 }
 
-// ── Filter ─────────────────────────────────────
+// â”€â”€ Filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function applyFilter() {
   const kat  = $("f-kategori").value.toUpperCase();
   const lok  = $("f-lokasi").value.toUpperCase();
@@ -1017,7 +1040,7 @@ function resetFilter() {
   applyFilter();
 }
 
-// ── Render table ───────────────────────────────
+// â”€â”€ Render table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderTable() {
   const tbody = $("aset-tbody");
   const empty = $("empty-state");
@@ -1056,7 +1079,7 @@ function renderTable() {
   `).join("");
 }
 
-// ── Selection ──────────────────────────────────
+// â”€â”€ Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function toggleSelect(kode, checked) {
   if (checked) selectedSet.add(kode);
   else         selectedSet.delete(kode);
@@ -1104,17 +1127,17 @@ function deselectAll() {
 }
 
 function updateSelectedCount() {
-  // Minimal counter — stats bar removed per request
+  // Minimal counter â€” stats bar removed per request
 }
 
-// ── Size selector ──────────────────────────────
+// â”€â”€ Size selector â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function selectSize(el) {
   document.querySelectorAll(".size-opt").forEach(e => e.classList.remove("selected"));
   el.classList.add("selected");
   printCols = parseInt(el.dataset.cols);
 }
 
-// ── Generate QR ────────────────────────────────
+// â”€â”€ Generate QR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function generateQR() {
   if (!selectedSet.size) {
     const errEl = $("qr-gen-error");
@@ -1144,7 +1167,7 @@ function generateQR() {
     card.innerHTML = `
       <div class="qr-card-kode">${a.kode}</div>
       <div id="qr-s-${a.kode.replace(/[^a-zA-Z0-9]/g,'_')}"></div>
-      <div class="qr-card-nama">${a.nama.length > 24 ? a.nama.substring(0,24)+"…" : a.nama}</div>
+      <div class="qr-card-nama">${a.nama.length > 24 ? a.nama.substring(0,24)+"â€¦" : a.nama}</div>
       <div class="qr-card-lembaga">DKP BALI</div>
     `;
     grid.appendChild(card);
@@ -1159,7 +1182,7 @@ function generateQR() {
     pcard.innerHTML = `
       <div class="print-kode">${a.kode}</div>
       <div id="qr-p-${a.kode.replace(/[^a-zA-Z0-9]/g,'_')}"></div>
-      <div class="print-nama">${a.nama.length > 28 ? a.nama.substring(0,28)+"…" : a.nama}</div>
+      <div class="print-nama">${a.nama.length > 28 ? a.nama.substring(0,28)+"â€¦" : a.nama}</div>
       <div class="print-inst">DKP BALI</div>
     `;
     printGrid.appendChild(pcard);
@@ -1180,7 +1203,7 @@ function doPrint() {
   window.onafterprint = () => { $("print-area").style.display = "none"; };
 }
 
-// ── Init ───────────────────────────────────────
+// â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 UI.renderNavigation("aset");`r`nloadAset();
 
 function toggleMore() {
@@ -1211,3 +1234,4 @@ document.addEventListener("focusout", e => {
 <div id="app-drawer"></div>
 </body>
 </html>
+
