@@ -34,16 +34,91 @@ nav.topnav {
   background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  height:54px;display:flex;align-items:center;padding:0 16px;gap:12px;
+  height:56px;display:flex;align-items:center;padding:0 16px;gap:12px;
 }
 .nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
 .nav-mark{
   width:32px;height:32px;border-radius:8px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
+  background:linear-gradient(135deg,var(--wave),var(--foam));
   display:flex;align-items:center;justify-content:center;font-size:15px;
 }
 .nav-title{font-family:var(--title-sans);font-size:13px;font-weight:700;color:var(--text)}
 .nav-sub{font-size:9px;color:var(--muted);font-family:var(--mono);letter-spacing:.06em}
+
+.desktop-nav{display:none;gap:16px;margin-left:24px}
+@media(min-width: 768px) {
+  .desktop-nav{display:flex;align-items:center}
+}
+.desktop-nav-item{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;padding:6px 12px;border-radius:6px}
+.desktop-nav-item:hover{color:var(--text);background:var(--ink2)}
+.desktop-nav-item.active{color:var(--wave);background:rgba(0,119,230,.08)}
+
+.desktop-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.desktop-dropdown-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.desktop-dropdown-btn:hover {
+  color: var(--text);
+  background: var(--ink2);
+}
+.desktop-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--ink);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-top: 4px;
+}
+.desktop-dropdown-content a {
+  color: var(--text);
+  padding: 10px 14px;
+  text-decoration: none;
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background .2s;
+}
+.desktop-dropdown-content a:hover {
+  background-color: var(--ink2);
+}
+.desktop-dropdown:hover .desktop-dropdown-content {
+  display: block;
+}
+
+.btn-back-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  font-family: var(--sans);
+  transition: all .2s;
+}
+.btn-back-header:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
 
 main {
   max-width: 680px;
@@ -85,23 +160,25 @@ main {
 
 /* Card */
 .form-card {
-  background: var(--ink);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+  border-radius: 18px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 .divider {
-  font-family: var(--title-sans);
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 9.5px;
+  font-weight: 700;
   color: var(--muted);
-  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 24px 0 16px 0;
+  letter-spacing: .12em;
+  margin: 20px 0 14px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  font-family: var(--mono);
 }
 .divider::after {
   content: '';
@@ -130,45 +207,66 @@ main {
   gap: 6px;
 }
 .field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text);
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 6px;
+  font-family: var(--mono);
 }
 .field label span.req {
-  color: var(--red);
+  color: var(--wave);
   margin-left: 2px;
 }
 
 /* Form Controls */
-.form-control, input[type="text"], input[type="date"], select, textarea {
+.form-control, .autocomplete-input, input[type="text"], input[type="date"], select, textarea {
   width: 100%;
-  padding: 10px 12px;
-  font-size: 13px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: 11px 14px;
+  font-size: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
   background: var(--ink2);
   color: var(--text);
   font-family: var(--sans);
   transition: all 0.2s ease;
 }
-.form-control:focus, input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+.form-control:focus, .autocomplete-input:focus, input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--wave);
   background: var(--ink);
-  box-shadow: 0 0 0 3px rgba(0, 119, 230, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 119, 230, 0.08);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin {
+  animation: spin 0.6s linear infinite;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
 .autofill {
   min-height: 38px;
-  padding: 10px 12px;
+  padding: 10px 14px;
   font-size: 13px;
-  background: rgba(0, 85, 170, 0.03);
+  background: rgba(0, 119, 230, 0.04);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   font-weight: 600;
-  color: var(--sea);
+  color: var(--wave);
 }
 
 /* Autocomplete styling */
@@ -412,6 +510,23 @@ nav.bottomnav {
       <div class="nav-sub">DKP BALI</div>
     </div>
   </a>
+  <div class="desktop-nav">
+    <a href="../aset/index.html" class="desktop-nav-item">Aset</a>
+    <a href="../helpdesk/index.html" class="desktop-nav-item">Helpdesk</a>
+    <a href="../rapat/index.html" class="desktop-nav-item">Rapat</a>
+    <a href="../humas/index.html" class="desktop-nav-item">Humas</a>
+    <a href="../bbm/index.html" class="desktop-nav-item">BBM</a>
+    <div class="desktop-dropdown">
+      <button class="desktop-dropdown-btn">Dashboard <span>▼</span></button>
+      <div class="desktop-dropdown-content">
+        <a href="../dashboard/dashboard_ews/index.html">Dashboard EWS</a>
+        <a href="../dashboard/dashboard_ekspor/index.html">Dashboard Ekspor</a>
+        <a href="../dashboard/dashboard_kendaraan/index.html">Dashboard Kendaraan</a>
+      </div>
+    </div>
+  </div>
+  <div style="flex: 1"></div>
+  <a href="../index.html" class="btn-back-header">Beranda</a>
 </nav>
 
 <main>
@@ -533,7 +648,7 @@ nav.bottomnav {
           </div>
         </div>
 
-        <button type="submit" class="btn-submit" id="btn-submit">Kirim Pengajuan Peminjaman</button>
+        <button type="submit" class="btn-submit" id="btn-submit"><span>Kirim Pengajuan Peminjaman</span></button>
       </form>
     </div>
   </div>
@@ -876,7 +991,7 @@ async function submitForm(e) {
   const ttdBase64 = canvas.toDataURL("image/png");
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.textContent = "Mengirim...";
+  btn.innerHTML = `<span class="spin"></span> <span>Mengirim...</span>`;
   
   const payload = {
     action: "submitBookingCar",
@@ -905,12 +1020,12 @@ async function submitForm(e) {
     } else {
       alert("Gagal mengirim pengajuan: " + (json.message || "Error server"));
       btn.disabled = false;
-      btn.textContent = "Kirim Pengajuan Peminjaman";
+      btn.innerHTML = "<span>Kirim Pengajuan Peminjaman</span>";
     }
   } catch (err) {
     alert("Koneksi gagal: " + err.message);
     btn.disabled = false;
-    btn.textContent = "Kirim Pengajuan Peminjaman";
+    btn.innerHTML = "<span>Kirim Pengajuan Peminjaman</span>";
   }
 }
 
