@@ -12,7 +12,6 @@
 /* ── helpdesk/index.html — Module-specific styles only ── */
 
 /* MAIN LAYOUT */
-main { max-width: 560px; margin: 0 auto; padding: 20px 16px 100px; }
 .section { display: none; }
 .section.active { display: block; }
 
@@ -178,9 +177,7 @@ main { max-width: 560px; margin: 0 auto; padding: 20px 16px 100px; }
 .desktop-dropdown:hover .desktop-dropdown-content { display: block; }
 .desktop-dropdown:hover .desktop-dropdown-btn { color: var(--text); background: var(--ink2); }
 
-/* DESKTOP: form-grid 2-col layout */
 @media (min-width: 768px) {
-  main { max-width: 1000px; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .form-grid .full-width { grid-column: span 2; }
 }
