@@ -771,6 +771,14 @@ body.keyboard-open .more-drawer {
 
 
 <script>
+window.addEventListener('error', function(e) {
+  console.error("Global Error Caught:", e);
+  const errMsg = document.createElement('div');
+  errMsg.style.cssText = "position:fixed;top:10px;left:10px;background:#fee2e2;color:#991b1b;border:1px solid #f87171;padding:12px;border-radius:8px;z-index:9999;font-size:12px;max-width:300px;box-shadow:0 4px 12px rgba(0,0,0,0.1);font-family:sans-serif;";
+  errMsg.innerHTML = `<strong>JavaScript Error:</strong> ${e.message}<br/><small style="color:#7f1d1d;">File: ${e.filename ? e.filename.split('/').pop() : 'unknown'}:${e.lineno || 0}</small>`;
+  document.body.appendChild(errMsg);
+});
+
 // ═══════════════════════════════════════════
 // KONFIGURASI
 // ═══════════════════════════════════════════
@@ -1156,7 +1164,7 @@ async function handleEditParam() {
   
   const item = allTiket.find(t => t.id === editId);
   if (!item) {
-    alert("Tiket helpdesk tidak ditemukan.");
+    alert(`Tiket helpdesk dengan ID "${editId}" tidak ditemukan di database. (Jumlah data terunduh: ${allTiket.length})`);
     return;
   }
   

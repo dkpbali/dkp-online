@@ -1165,8 +1165,6 @@ function resetForm() {
 
 // ── Load Konten ──────────────────────────────
 async function loadKonten() {
-  document.getElementById("konten-list").innerHTML =
-    Array(3).fill().map(() => '<div class="shimmer-card" style="height:100px; margin-bottom:10px;"></div>').join('');
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
       allKonten = [
@@ -1179,18 +1177,9 @@ async function loadKonten() {
       const json = await res.json();
       if (json.success) allKonten = json.data;
     }
-    renderKonten();
-  } catch {
-    document.getElementById("konten-list").innerHTML =
-      '<div class="empty-state"><svg class="svg-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 10px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><p>Gagal memuat data.</p></div>';
+  } catch (e) {
+    console.error("Error loading content:", e);
   }
-}
-
-function setStatusFilter(status, el) {
-  filterStatus = status;
-  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
-  el.classList.add("active");
-  renderKonten();
 }
 
 function filterKonten() {
@@ -1198,8 +1187,10 @@ function filterKonten() {
 }
 
 function renderKonten() {
-  const q    = document.getElementById("search-konten").value.toLowerCase();
   const list = document.getElementById("konten-list");
+  if (!list) return;
+  const qEl = document.getElementById("search-konten");
+  const q = qEl ? qEl.value.toLowerCase() : "";
 
   let filtered = allKonten.filter(k => {
     if (filterStatus !== "SEMUA" && k.status !== filterStatus) return false;
