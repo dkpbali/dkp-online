@@ -1618,7 +1618,7 @@ function renderActTab(tab) {
         } else {
           if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
             actions = `<div class="act-actions">
-              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}')">Edit</button>
+              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumas('${h.id}', '${escHtml(h.namaKonten)}', '${h.tanggalPosting}', '${escHtml(h.linkKonten)}', '${h.platform}', '${h.jenisKonten}', '${h.screenshotUrl}')">Edit</button>
               <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHumas('${h.id}')">Hapus</button>
             </div>`;
           }
@@ -1760,7 +1760,36 @@ async function valBbm(id)         { await postAction({ action: "validateBbm", id
 async function selesaiBbm(id)     { await postAction({ action: "selesaiBbm", id_bbm: id }); }
 
 // ── User Actions (Edit & Delete) ──────────────
-function editHumas(id, nama, tanggal, link) {
+let editHumasFotoB64 = null;
+
+function onEditPlatformChange() {
+  const p = document.getElementById("edit-hum-platform").value;
+  const jSel = document.getElementById("edit-hum-jenis");
+  const options = {
+    "Instagram": ["Infografis", "Reels", "Feeds Video", "Story"],
+    "YouTube":   ["Video Panjang (Vlog)", "Shorts", "Live Streaming"],
+    "TikTok":    ["Video Pendek"],
+    "Facebook":  ["Infografis", "Video", "Lainnya"]
+  };
+  const list = options[p] || [];
+  jSel.innerHTML = list.map(j => `<option value="${j}">${j}</option>`).join("");
+}
+
+async function handleEditHumasFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const compressedDataUrl = await compressImage(file, 1600, 1600, 0.8);
+    editHumasFotoB64 = compressedDataUrl;
+    document.getElementById("edit-hum-ss-preview").src = compressedDataUrl;
+    document.getElementById("edit-hum-ss-preview-container").style.display = "block";
+  } catch (err) {
+    console.error("Compression error:", err);
+    alert("Gagal memproses foto.");
+  }
+}
+
+function editHumas(id, nama, tanggal, link, platform, jenis, screenshotUrl) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah konten Humas.");
     return;
@@ -1769,6 +1798,27 @@ function editHumas(id, nama, tanggal, link) {
   document.getElementById('edit-hum-nama').value = nama;
   document.getElementById('edit-hum-tanggal').value = tanggal;
   document.getElementById('edit-hum-link').value = link;
+  
+  if (platform) {
+    document.getElementById('edit-hum-platform').value = platform;
+  }
+  onEditPlatformChange();
+  if (jenis) {
+    document.getElementById('edit-hum-jenis').value = jenis;
+  }
+  
+  editHumasFotoB64 = null;
+  const previewContainer = document.getElementById("edit-hum-ss-preview-container");
+  const previewImg = document.getElementById("edit-hum-ss-preview");
+  if (screenshotUrl) {
+    previewImg.src = screenshotUrl;
+    previewContainer.style.display = "block";
+  } else {
+    previewImg.src = "";
+    previewContainer.style.display = "none";
+  }
+  document.getElementById("edit-hum-ss-file").value = "";
+  
   openModal('edit-humas-modal');
 }
 async function deleteHumas(id) {
@@ -1961,8 +2011,25 @@ async function submitEditHumas(e) {
   const nama = document.getElementById('edit-hum-nama').value;
   const tanggal = document.getElementById('edit-hum-tanggal').value;
   const link = document.getElementById('edit-hum-link').value;
+  const platform = document.getElementById('edit-hum-platform').value;
+  const jenis = document.getElementById('edit-hum-jenis').value;
+  
+  const payload = {
+    action: "updateHumas",
+    id_konten: id,
+    nama_konten: nama,
+    tanggal_posting: tanggal,
+    link_konten: link,
+    platform: platform,
+    jenis_konten: jenis
+  };
+  
+  if (editHumasFotoB64) {
+    payload.screenshot_base64 = editHumasFotoB64;
+  }
+  
   closeModal('edit-humas-modal');
-  await postAction({ action: "updateHumas", id_konten: id, nama_konten: nama, tanggal_posting: tanggal, link_konten: link });
+  await postAction(payload);
 }
 
 async function submitEditBbm(e) {
@@ -2348,7 +2415,7 @@ async function submitEditBooking(e) {
 
   <!-- Modal Edit Humas -->
   <div id="edit-humas-modal" class="modal-overlay">
-    <div class="modal-content-card">
+    <div class="modal-content-card" style="max-width: 500px;">
       <button type="button" onclick="closeModal('edit-humas-modal')" class="modal-close-btn">✕</button>
       <div class="modal-header-title">Edit Konten Humas</div>
       <form id="edit-humas-form" onsubmit="submitEditHumas(event)">
@@ -2357,13 +2424,39 @@ async function submitEditBooking(e) {
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Nama Konten</label>
           <input type="text" id="edit-hum-nama" class="form-control" required/>
         </div>
+        
+        <div class="field" style="margin-bottom: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Platform</label>
+            <select id="edit-hum-platform" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;" onchange="onEditPlatformChange()">
+              <option value="Instagram">Instagram</option>
+              <option value="YouTube">YouTube</option>
+              <option value="TikTok">TikTok</option>
+              <option value="Facebook">Facebook</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Jenis Konten</label>
+            <select id="edit-hum-jenis" class="form-control" style="background: var(--ink); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px; width: 100%;">
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+        </div>
+
         <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Tanggal Rencana Posting</label>
           <input type="date" id="edit-hum-tanggal" class="form-control" required/>
         </div>
-        <div class="field" style="margin-bottom: 16px;">
+        <div class="field" style="margin-bottom: 12px;">
           <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Link Konten (Opsional)</label>
           <input type="url" id="edit-hum-link" class="form-control"/>
+        </div>
+        <div class="field" style="margin-bottom: 16px;">
+          <label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)">Bukti Screenshot (Opsional - Pilih Baru untuk Mengganti)</label>
+          <input type="file" id="edit-hum-ss-file" class="form-control" accept="image/*" onchange="handleEditHumasFile(event)"/>
+          <div id="edit-hum-ss-preview-container" style="margin-top: 10px; border: 1px solid var(--border); border-radius: 8px; padding: 6px; display: none; text-align: center; background: var(--light);">
+            <img id="edit-hum-ss-preview" src="" alt="SS Preview" style="max-height: 120px; max-width: 100%; object-fit: contain; border-radius: 6px;" />
+          </div>
         </div>
         <button type="submit" class="btn-submit" style="width:100%;padding:12px;background:var(--wave);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Simpan Perubahan</button>
       </form>
