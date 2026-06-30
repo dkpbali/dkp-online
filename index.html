@@ -1755,7 +1755,11 @@ async function postAction(payload) {
     const data = await res.json();
     if (data.success) {
       alert(data.message || "Aksi berhasil!");
-      loadStats(); loadAktivitasTerkini();
+      if (payload.action.toLowerCase().includes("delete") || payload.action.toLowerCase().includes("cancel")) {
+        window.location.reload();
+      } else {
+        loadStats(); loadAktivitasTerkini();
+      }
     } else {
       alert(data.message || "Aksi gagal.");
     }

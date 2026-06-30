@@ -1434,9 +1434,7 @@ async function deleteBooking(id) {
     const data = await res.json();
     if (data.success) {
       alert("Booking berhasil dibatalkan.");
-      await loadBooking();
-      buildDateStrip();
-      renderJadwal();
+      window.location.reload();
     } else {
       throw new Error(data.message || "Gagal membatalkan.");
     }
