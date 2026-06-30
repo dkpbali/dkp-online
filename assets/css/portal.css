@@ -580,23 +580,6 @@
   margin-right: 8px;
 }
 
-/* ── DESKTOP SPLIT GRID ── */
-@media (min-width: 1024px) {
-  .desktop-layout {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-  }
-  .desktop-left {
-    flex: 1;
-    min-width: 0;
-  }
-  .desktop-right {
-    width: 320px;
-    flex-shrink: 0;
-  }
-}
-
 /* ── APP GRID & PAGES (PORTAL SLIDER) ── */
 .app-grid {
   display: flex;
