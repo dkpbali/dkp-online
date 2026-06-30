@@ -292,6 +292,7 @@ main {
 .autocomplete-item {
   padding: 10px 14px;
   cursor: pointer;
+  font-size: 13px;
   border-bottom: 1px solid var(--ink2);
   transition: background 0.15s ease;
 }
@@ -299,7 +300,7 @@ main {
   background: var(--ink2);
 }
 .autocomplete-item-sub {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--muted);
   margin-top: 2px;
 }
@@ -941,7 +942,7 @@ function initAutocomplete(inputId, listId, hiddenId, dataList, onSelectCallback)
 
     dropdownList.innerHTML = filtered.map(item => `
       <div class="autocomplete-item" data-id="${item.id}" data-nama="${item.nama}">
-        <div style="font-weight:600;">${item.nama}</div>
+        <div>${item.nama}</div>
         <div class="autocomplete-item-sub">${item.id} · ${item.bidang || ""}</div>
       </div>
     `).join("");
