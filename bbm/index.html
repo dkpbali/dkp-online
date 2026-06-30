@@ -1428,7 +1428,7 @@ async function loadBbmStatus() {
         ];
       }
     } else {
-      const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm`);
+      const res = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getBbm&_t=${Date.now()}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
       if (json.success) {

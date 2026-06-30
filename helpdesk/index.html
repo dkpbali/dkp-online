@@ -1035,7 +1035,7 @@ async function loadTiket() {
         { id:"TKT-0001", tanggal:"01/06/2025 09:30", nama:"NI PUTU ADELIA",    judul:"Laptop tidak bisa menyala", status:"SELESAI" },
       ];
     } else {
-      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHelpdesk`);
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHelpdesk&_t=${Date.now()}`);
       const json = await res.json();
       if (json.success) allTiket = json.data;
     }

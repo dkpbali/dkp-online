@@ -1173,7 +1173,7 @@ async function loadKonten() {
         { id:"HUM-0001", namaPegawai:"DEWA YOJANA",           bidang:"BIDANG P2HP",           platform:"TikTok",    jenisKonten:"Video",   namaKonten:"Behind the scenes panen lobster",         tanggalPosting:"28/05/2025", screenshotUrl:"", status:"DITOLAK" },
       ];
     } else {
-      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHumas`);
+      const res  = await fetch(`${CFG.APPS_SCRIPT_URL}?action=getHumas&_t=${Date.now()}`);
       const json = await res.json();
       if (json.success) allKonten = json.data;
     }
