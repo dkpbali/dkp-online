@@ -1066,7 +1066,7 @@ async function submitHumas(e) {
 
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.innerHTML = '<span class="spin" style="border-top-color:#fff; display:inline-block; vertical-align:middle; margin-right:8px; width:16px; height:16px;"></span><span>Menyimpan...</span>';
+  btn.innerHTML = '<span class="spin" style="border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; width: 16px; height: 16px; display: inline-block;"></span> <span>Menyimpan...</span>';
 
   const pegId  = document.getElementById("f-pegawai").value;
   if (!pegId) {

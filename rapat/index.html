@@ -224,6 +224,7 @@ main{max-width:560px;margin:0 auto;padding:20px 16px 100px}
   background:linear-gradient(135deg,var(--indigo),var(--violet));
   color:#fff;font-family:var(--sans);font-size:15px;font-weight:700;
   cursor:pointer;transition:opacity .2s;margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
 }
 .btn-submit:hover{opacity:.9}
 .btn-submit:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:1}
@@ -1174,7 +1175,7 @@ async function submitBooking(e) {
 
   const btn = document.getElementById("btn-submit");
   btn.disabled = true;
-  btn.innerHTML = '<span class="spin" style="border-top-color:#fff; display:inline-block; vertical-align:middle; margin-right:8px; width:16px; height:16px;"></span><span>Mengirim...</span>';
+  btn.innerHTML = '<span class="spin" style="border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; width: 16px; height: 16px; display: inline-block;"></span> <span>Mengirim...</span>';
 
   const pemId  = document.getElementById("f-pemohon").value;
   if (!pemId) {
