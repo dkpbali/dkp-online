@@ -1561,18 +1561,10 @@ function renderActTab(tab) {
       const isStatusOpen = t.status.toUpperCase() === 'OPEN';
       const badgeColor = isStatusOpen ? 'var(--orange)' : 'var(--wave)';
       const statusLabel = isStatusOpen ? 'BARU' : t.status;
-      const isOwner = isUserLogged && (
-        (t.idPelapor && t.idPelapor === loggedPegId) ||
-        (t.nama && currentUser.name && t.nama.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
-      );
-
-      let actions = '';
-      if (isStatusOpen && isUserLogged && isOwner) {
-        actions = `<div class="act-actions">
-          <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHelpdeskRedirect('${t.id}')">Edit</button>
-          <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHelpdesk('${t.id}')">Hapus</button>
-        </div>`;
-      }
+      const actions = `<div class="act-actions">
+        <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHelpdeskRedirect('${t.id}', '${escHtml(t.nama)}')">Edit</button>
+        <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHelpdesk('${t.id}', '${escHtml(t.nama)}')">Hapus</button>
+      </div>`;
 
       return `
         <div class="activity-item" style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:12px; width:100%;">
@@ -1636,13 +1628,11 @@ function renderActTab(tab) {
               <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); valHumas('${h.id}', 'DITOLAK')">Tolak</button>
             </div>`;
           }
-        } else if (isOwner) {
-          if (h.status === 'OPEN' || h.status === 'PENDING' || !h.status) {
-            actions = `<div class="act-actions">
-              <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumasRedirect('${h.id}')">Edit</button>
-              <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHumas('${h.id}')">Hapus</button>
-            </div>`;
-          }
+        } else {
+          actions = `<div class="act-actions">
+            <button class="act-btn act-btn-primary" onclick="event.stopPropagation(); editHumasRedirect('${h.id}', '${escHtml(h.namaPegawai)}')">Edit</button>
+            <button class="act-btn act-btn-danger" onclick="event.stopPropagation(); deleteHumas('${h.id}', '${escHtml(h.namaPegawai)}')">Hapus</button>
+          </div>`;
         }
 
         return `
@@ -1701,15 +1691,13 @@ function renderActTab(tab) {
         if (isStatusOpen) {
           statusLabel = 'MENUNGGU DISETUJUI';
           statusColor = 'var(--orange)';
-          if (isUserLogged) {
-            if (isLoggedAdmin) {
-              actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
-            } else if (isOwner) {
-              actions = `<div class="act-actions">
-                <button class="act-btn" onclick="editBbmRedirect('${b.id_bbm}')">Edit</button>
-                <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}')">Hapus</button>
-              </div>`;
-            }
+          if (isUserLogged && isLoggedAdmin) {
+            actions = `<div class="act-actions"><button class="act-btn act-btn-success" onclick="valBbm('${b.id_bbm}')">Setujui</button></div>`;
+          } else {
+            actions = `<div class="act-actions">
+              <button class="act-btn" onclick="editBbmRedirect('${b.id_bbm}', '${escHtml(b.nama_penerima)}')">Edit</button>
+              <button class="act-btn act-btn-danger" onclick="deleteBbm('${b.id_bbm}', '${escHtml(b.nama_penerima)}')">Hapus</button>
+            </div>`;
           }
         } else if (isStatusApproved) {
           statusLabel = 'BELUM DILAPORKAN';
@@ -1823,34 +1811,51 @@ function getDriveViewUrl(url) {
   return url;
 }
 
-function editHumasRedirect(id) {
+function editHumasRedirect(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah konten Humas.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat mengedit konten ini.`);
     return;
   }
   window.location.href = `humas/index.html?editHumas=${id}`;
 }
 
-function editHelpdeskRedirect(id) {
+function editHelpdeskRedirect(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah tiket Helpdesk.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat mengedit tiket ini.`);
     return;
   }
   window.location.href = `helpdesk/index.html?editHelpdesk=${id}`;
 }
 
-async function deleteHelpdesk(id) {
+async function deleteHelpdesk(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk menghapus tiket Helpdesk.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus tiket ini.`);
     return;
   }
   if (confirm("Apakah Anda yakin ingin menghapus laporan helpdesk ini?")) {
     await postAction({ action: "deleteHelpdesk", id_tiket: id });
   }
 }
-async function deleteHumas(id) {
+
+async function deleteHumas(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk menghapus konten Humas.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus konten ini.`);
     return;
   }
   if (confirm("Apakah Anda yakin ingin menghapus konten humas ini?")) {
@@ -1892,16 +1897,25 @@ function showDetailHumas(id) {
   openModal("detail-humas-modal");
 }
 
-function editBbmRedirect(id) {
+function editBbmRedirect(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah permohonan BBM.");
     return;
   }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat mengedit permohonan ini.`);
+    return;
+  }
   window.location.href = `bbm/index.html?editBbm=${id}`;
 }
-async function deleteBbm(id) {
+
+async function deleteBbm(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk menghapus permohonan BBM.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus permohonan ini.`);
     return;
   }
   if (confirm("Apakah Anda yakin ingin menghapus permohonan BBM ini?")) {
@@ -2246,16 +2260,12 @@ function renderSelectedDayBookings(dateStr, bookings) {
     <div style="font-size:11px; font-weight:700; color:var(--muted); font-family:var(--mono); margin-bottom:8px; text-transform:uppercase;">JADWAL ${formattedDate} (${bookings.length})</div>
     <div style="display:flex; flex-direction:column; gap:8px;">
       ${bookings.map(b => {
-        const isOwner = isUserLogged && (
-          (b.id_pemohon && b.id_pemohon === loggedPegId) ||
-          (b.pemohon && currentUser.name && b.pemohon.toLowerCase().trim() === currentUser.name.toLowerCase().trim())
-        );
-        const actionsHtml = (isLoggedAdmin || isOwner) ? `
+        const actionsHtml = `
           <div class="act-actions" style="margin-top: 8px; display: flex; gap: 8px; justify-content: flex-start; margin-left: 0;">
-            <button class="act-btn act-btn-primary" onclick="editBookingHome('${b.id}')">Edit</button>
-            <button class="act-btn act-btn-danger" onclick="cancelBookingHome('${b.id}')">Hapus</button>
+            <button class="act-btn act-btn-primary" onclick="editBookingHome('${b.id}', '${escHtml(b.pemohon)}')">Edit</button>
+            <button class="act-btn act-btn-danger" onclick="cancelBookingHome('${b.id}', '${escHtml(b.pemohon)}')">Hapus</button>
           </div>
-        ` : '';
+        `;
 
         const bidangStr = (b.bidang && b.bidang.trim() !== "" && b.bidang.trim() !== "-") ? ` (${escHtml(b.bidang)})` : "";
 
@@ -2294,17 +2304,25 @@ function renderSelectedDayBookings(dateStr, bookings) {
   `;
 }
 
-function editBookingHome(id) {
+function editBookingHome(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk mengubah booking.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik booking (${ownerName}) atau Admin yang dapat mengedit booking ini.`);
     return;
   }
   window.location.href = `rapat/index.html?editBooking=${id}`;
 }
 
-async function cancelBookingHome(id) {
+async function cancelBookingHome(id, ownerName) {
   if (!currentUser) {
     alert("Silakan login dengan Google terlebih dahulu untuk membatalkan booking.");
+    return;
+  }
+  if (!currentUser.is_admin && currentUser.name.toLowerCase().trim() !== ownerName.toLowerCase().trim()) {
+    alert(`Akses Ditolak. Hanya pemilik booking (${ownerName}) atau Admin yang dapat membatalkan booking ini.`);
     return;
   }
   if (confirm("Apakah Anda yakin ingin membatalkan booking ruang rapat ini?")) {
