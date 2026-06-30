@@ -1533,10 +1533,13 @@ async function loadAktivitasTerkini() {
       actBbm = json.bbm || [];
       actRapat = json.booking || [];
       renderActTab(currentActTab);
+    } else {
+      console.error("Aktivitas Terkini API success false:", json);
+      listEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--red);font-size:13px">Gagal memuat aktivitas terkini: ${json.message || 'Error tidak dikenal'}</div>`;
     }
   } catch(e) { 
     console.error("Aktivitas Terkini load error:", e);
-    listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--red);font-size:13px">Gagal memuat aktivitas terkini.</div>';
+    listEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--red);font-size:13px">Gagal memuat aktivitas terkini. (Error: ${e.message || e})</div>`;
   }
 }
 
