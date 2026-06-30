@@ -1367,8 +1367,9 @@ function switchTab(tab) {
 
 async function loadBbmStatus() {
   const list = $("bbm-status-list");
-  if (!list) return;
-  list.innerHTML = Array(3).fill().map(() => '<div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>').join('');
+  if (list) {
+    list.innerHTML = Array(3).fill().map(() => '<div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>').join('');
+  }
 
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL.includes("GANTI_DENGAN")) {
@@ -1437,10 +1438,14 @@ async function loadBbmStatus() {
         throw new Error(json.message || "Server returned success=false");
       }
     }
-    renderBbmStatus(allBbm);
+    if (list) {
+      renderBbmStatus(allBbm);
+    }
   } catch (err) {
     console.error("loadBbmStatus error:", err);
-    list.innerHTML = `<div class="empty-state" style="color:var(--red);">Gagal memuat data permohonan: ${err.message}</div>`;
+    if (list) {
+      list.innerHTML = `<div class="empty-state" style="color:var(--red);">Gagal memuat data permohonan: ${err.message}</div>`;
+    }
     alert(`Gagal memuat data permohonan BBM: ${err.message}`);
   }
 }
