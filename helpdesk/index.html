@@ -1020,9 +1020,6 @@ function resetForm() {
 
 // ── Load Tiket ──────────────────────────────
 async function loadTiket() {
-  const list = document.getElementById("tiket-list");
-  list.innerHTML = Array(3).fill().map(() => '<div class="shimmer-card" style="height:90px; margin-bottom:10px;"></div>').join('');
-
   try {
     if (!CFG.APPS_SCRIPT_URL || CFG.APPS_SCRIPT_URL === "GANTI_DENGAN_URL_APPS_SCRIPT") {
       allTiket = [
@@ -1034,14 +1031,14 @@ async function loadTiket() {
       const json = await res.json();
       if (json.success) allTiket = json.data;
     }
-    renderTiket(allTiket);
-  } catch {
-    list.innerHTML = '<div class="empty-state"><span style="display: flex; justify-content: center; margin-bottom: 12px; color: var(--red);"><svg style="width: 48px; height: 48px; stroke-width: 1.5; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><p>Gagal memuat data.</p></div>';
+  } catch (e) {
+    console.error("Error loading tickets:", e);
   }
 }
 
 function renderTiket(tiket) {
   const list = document.getElementById("tiket-list");
+  if (!list) return;
   if (!tiket.length) {
     list.innerHTML = '<div class="empty-state"><span style="display: flex; justify-content: center; margin-bottom: 12px; color: var(--muted);"><svg style="width: 48px; height: 48px; stroke-width: 1.5; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><line x1="2" y1="17" x2="22" y2="17"/></svg></span><p>Belum ada tiket ditemukan.</p></div>';
     return;
@@ -1065,7 +1062,9 @@ function renderTiket(tiket) {
 }
 
 function filterTiket() {
-  const q = document.getElementById("search-tiket").value.toLowerCase();
+  const qEl = document.getElementById("search-tiket");
+  if (!qEl) return;
+  const q = qEl.value.toLowerCase();
   renderTiket(allTiket.filter(t =>
     t.nama.toLowerCase().includes(q) ||
     t.id.toLowerCase().includes(q)   ||
