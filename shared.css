@@ -45,10 +45,35 @@
   /* Gradients */
   --brand-grad: linear-gradient(135deg, var(--sea), var(--wave));
 
+  /* Theme elements */
+  --header-bg: rgba(255, 255, 255, 0.95);
+
   /* Typography */
   --sans:       'Inter', sans-serif;
   --title-sans: 'Outfit', sans-serif;
   --mono:       'Fira Code', monospace;
+}
+
+/* ── DARK THEME ── */
+html.dark {
+  /* Backgrounds */
+  --ink:      #0F172A; /* Slate 900 */
+  --ink2:     #1E293B; /* Slate 800 */
+  --ink3:     #334155; /* Slate 700 */
+  --light:    #020617; /* Slate 950 */
+  --card:     #1E293B; /* Slate 800 */
+  --sand:     #1E3A8A; /* Dark blue sand */
+
+  /* Text */
+  --text:     #F8FAFC; /* Slate 50 */
+  --muted:    #94A3B8; /* Slate 400 */
+
+  /* Borders */
+  --border:   #334155; /* Slate 700 */
+  --border2:  #475569; /* Slate 600 */
+
+  /* Theme elements */
+  --header-bg: rgba(15, 23, 42, 0.95);
 }
 
 /* ── RESET & BASE ── */
@@ -153,7 +178,7 @@ main {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(255, 255, 255, .95);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
@@ -200,7 +225,7 @@ nav.topnav {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(255, 255, 255, .95);
+  background: var(--header-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -379,7 +404,7 @@ nav.topnav {
 .form-control:focus {
   outline: none;
   border-color: var(--wave);
-  background: #fff;
+  background: var(--ink);
   box-shadow: 0 0 0 3px rgba(0, 119, 230, 0.10);
 }
 .form-control::placeholder {
@@ -822,7 +847,7 @@ nav.topnav {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, .95);
+  background: var(--header-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border);
@@ -1025,3 +1050,31 @@ body.keyboard-open .more-drawer { display: none !important; }
   .desktop-nav { gap: 16px !important; }
   .desktop-nav-item { font-size: 13px !important; padding: 6px 12px !important; }
 }
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-toggle-btn {
+  background: var(--ink3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  outline: none;
+}
+.theme-toggle-btn:hover {
+  background: var(--ink2);
+  border-color: var(--border2);
+}
+.theme-toggle-btn svg {
+  stroke: var(--text);
+}
+.theme-icon-light { display: none; }
+html.dark .theme-icon-dark { display: none; }
+html.dark .theme-icon-light { display: block; }
