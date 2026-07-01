@@ -2282,3 +2282,30 @@ html.dark .ews-tabs {
   background: var(--ink2) !important;
   border-color: var(--border) !important;
 }
+
+html.dark .tabs {
+  background: var(--ink2) !important;
+  border-bottom-color: var(--border) !important;
+}
+html.dark .tab {
+  color: var(--muted) !important;
+}
+html.dark .tab.active {
+  color: var(--wave) !important;
+  border-bottom-color: var(--wave) !important;
+}
+
+.ekspor-insight-card {
+  background: var(--brand-grad);
+  color: #ffffff !important;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,85,170,0.15);
+  border: 1px solid rgba(0,119,230,0.12);
+}
+html.dark .ekspor-insight-card {
+  background: #1e3a8a !important; /* dark blue */
+  color: #ffffff !important;
+  border-color: rgba(59, 130, 246, 0.2) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+}
