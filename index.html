@@ -88,7 +88,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
 
 /* ── FISH DECORATIONS (swimming fish) ── */
 .fish { position: absolute; width: 24px; height: 14px; color: rgba(0, 119, 230, 0.18); pointer-events: none; z-index: 1; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.02)); }
-[data-theme="dark"] .fish { color: rgba(51, 153, 255, 0.15); filter: drop-shadow(0 2px 8px rgba(0, 119, 230, 0.2)); }
+html.dark .fish { color: rgba(51, 153, 255, 0.15); filter: drop-shadow(0 2px 8px rgba(0, 119, 230, 0.2)); }
 .fish svg { width: 100%; height: 100%; display: block; }
 .fish-1 { top: 55%; animation: swim-right 16s linear infinite; }
 .fish-2 { top: 72%; animation: swim-left 22s linear infinite; transform: scale(0.8); }
@@ -154,7 +154,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
   position: relative; overflow: hidden;
   animation: fadeUp .4s ease both;
 }
-[data-theme="dark"] .app-card {
+html.dark .app-card {
   background: rgba(30, 41, 59, 0.6);
   border-color: rgba(51, 153, 255, 0.08);
 }
@@ -169,7 +169,7 @@ main { max-width: 520px; margin: 0 auto; padding: 20px 16px 100px; }
   box-shadow: 0 10px 25px rgba(0, 119, 230, 0.12);
   background: rgba(255, 255, 255, 0.95);
 }
-[data-theme="dark"] .app-card:hover {
+html.dark .app-card:hover {
   box-shadow: 0 10px 25px rgba(0, 119, 230, 0.25);
   background: rgba(30, 41, 59, 0.8);
 }

@@ -144,10 +144,10 @@ style.textContent = `
 .custom-confirm-btn-cancel:hover {
   background: rgba(0,0,0,0.1);
 }
-[data-theme="dark"] .custom-confirm-btn-cancel {
+html.dark .custom-confirm-btn-cancel {
   background: rgba(255,255,255,0.05);
 }
-[data-theme="dark"] .custom-confirm-btn-cancel:hover {
+html.dark .custom-confirm-btn-cancel:hover {
   background: rgba(255,255,255,0.1);
 }
 .custom-confirm-btn-confirm {
