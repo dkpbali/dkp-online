@@ -90,7 +90,7 @@ style.textContent = `
   border-radius: 16px;
   padding: 24px;
   width: 90%;
-  max-width: 400px;
+  max-width: 460px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   font-family: var(--sans, sans-serif);
   transform: scale(0.9);
@@ -104,10 +104,9 @@ style.textContent = `
   font-size: 16px;
   font-weight: 700;
   color: var(--text, #333);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border, #e2e8f0);
+  padding-bottom: 12px;
 }
 .custom-confirm-message {
   font-size: 13px;
@@ -171,10 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     overlay.id = 'custom-confirm-overlay';
     overlay.innerHTML = `
       <div class="custom-confirm-card">
-        <div class="custom-confirm-title" id="custom-confirm-title">
-          <svg style="width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; display: inline-block; vertical-align: middle; margin-right: 4px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Konfirmasi Aksi
-        </div>
+        <div class="custom-confirm-title" id="custom-confirm-title">Konfirmasi Aksi</div>
         <div class="custom-confirm-message" id="custom-confirm-message">Apakah Anda yakin ingin melanjutkan?</div>
         <div class="custom-confirm-buttons">
           <button class="custom-confirm-btn custom-confirm-btn-cancel" id="custom-confirm-btn-cancel">Batal</button>
