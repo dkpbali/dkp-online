@@ -1106,11 +1106,17 @@ html.dark .hero {
   background: rgba(30, 41, 59, 0.45) !important;
   border-color: rgba(51, 65, 85, 0.4) !important;
 }
-html.dark .parallax-waves use {
-  fill: rgba(30, 41, 59, 0.2) !important;
+html.dark .parallax-waves use:nth-child(1) {
+  fill: rgba(0, 119, 230, 0.3) !important;
+}
+html.dark .parallax-waves use:nth-child(2) {
+  fill: rgba(51, 153, 255, 0.2) !important;
+}
+html.dark .parallax-waves use:nth-child(3) {
+  fill: rgba(255, 255, 255, 0.08) !important;
 }
 html.dark .parallax-waves use:nth-child(4) {
-  fill: rgba(15, 23, 42, 0.4) !important;
+  fill: var(--ink) !important;
 }
 html.dark .toast.success { background: #064e3b !important; color: #34d399 !important; border-color: rgba(52, 211, 153, 0.2) !important; }
 html.dark .toast.error   { background: #7f1d1d !important; color: #f87171 !important; border-color: rgba(248, 113, 113, 0.2) !important; }
