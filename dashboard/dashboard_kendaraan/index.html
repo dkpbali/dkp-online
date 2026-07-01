@@ -70,9 +70,9 @@
   <!-- Hero Section -->
   <div class="bbm-hero">
     <div class="bbm-content">
-      <div class="bbm-eyebrow" id="hero-eyebrow">MONITORING ARMADA</div>
-      <div class="bbm-title" id="hero-title">Dashboard Kendaraan &amp; Penggunaan</div>
-      <div class="bbm-sub" id="hero-subtitle">Statistik kendaraan dinas, samsat, riwayat service, dan monitoring penggunaan BBM.</div>
+      <div class="bbm-eyebrow" id="hero-eyebrow">MONITORING OPERASIONAL</div>
+      <div class="bbm-title" id="hero-title">Dashboard Kendaraan &amp; BBM</div>
+      <div class="bbm-sub" id="hero-subtitle">Statistik status samsat/pajak armada dinas, jadwal service, serta analisis realisasi bahan bakar operasional.</div>
     </div>
   </div>
 
@@ -454,18 +454,12 @@ function switchTab(tabName) {
     $("panel-kendaraan").style.display = "block";
     document.querySelector('.ews-tab[onclick="switchTab(\'kendaraan\')"]').classList.add("active");
     renderVehicles();
-    
-    $("hero-eyebrow").textContent = "MONITORING ARMADA & JATUH TEMPO";
-    $("hero-title").innerHTML = "Daftar Kendaraan &amp; Pajak";
-    $("hero-subtitle").textContent = "Informasi lengkap kendaraan dinas operasional Sekretariat, estimasi jadwal service, jatuh tempo Pajak/STNK.";
+    document.title = "Dashboard Kendaraan - ARUNIWAVES";
   } else if (tabName === "bbm") {
     $("panel-bbm").style.display = "block";
     document.querySelector('.ews-tab[onclick="switchTab(\'bbm\')"]').classList.add("active");
     renderDashboard();
-    
-    $("hero-eyebrow").textContent = "ANALIS KONSUMSI BBM";
-    $("hero-title").innerHTML = "Monitoring Realisasi BBM";
-    $("hero-subtitle").textContent = "Statistik kuota alokasi bidang, evaluasi efisiensi rute dinas, dan pengingat pelaporan voucher lapangan.";
+    document.title = "Dashboard Realisasi BBM - ARUNIWAVES";
   }
 }
 
