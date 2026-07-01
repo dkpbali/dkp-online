@@ -1066,6 +1066,7 @@ body.keyboard-open .more-drawer { display: none !important; }
   width: 34px;
   height: 34px;
   flex-shrink: 0;
+  margin-right: 8px;
   outline: none;
 }
 .theme-toggle-btn:hover {
@@ -1075,6 +1076,6 @@ body.keyboard-open .more-drawer { display: none !important; }
 .theme-toggle-btn svg {
   stroke: var(--text);
 }
-.theme-icon-light { display: none; }
-html.dark .theme-icon-dark { display: none; }
-html.dark .theme-icon-light { display: block; }
+.theme-icon-light { display: none !important; }
+html.dark .theme-icon-dark { display: none !important; }
+html.dark .theme-icon-light { display: block !important; }
