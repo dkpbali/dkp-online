@@ -245,6 +245,12 @@
   color: var(--text);
   background: var(--ink2);
 }
+
+@media (min-width: 768px) {
+  main {
+    max-width: 800px !important;
+  }
+}
 </style>
 
 </head>
@@ -300,7 +306,7 @@
   </div>
 
   <div id="section-form" class="section active">
-      <form id="bbm-form" onsubmit="submitFormBbm(event)" style="max-width: 640px; margin: 0 auto; padding: 0 16px;">
+      <form id="bbm-form" onsubmit="submitFormBbm(event)" style="width: 100%; max-width: 100%; padding: 0 16px; box-sizing: border-box;">
       <div class="form-grid">
 
       <!-- NAMA PENERIMA / PEGAWAI -->
