@@ -16,6 +16,7 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png"/>
 <title>ARUNIWAVES</title>
 <link rel="stylesheet" href="shared.css"/>
+<script src="shared.js"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 /* ── INDEX.HTML — Page-specific styles only ──
@@ -1243,7 +1244,7 @@ async function deleteHelpdesk(id, ownerName) {
     alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus tiket ini.`);
     return;
   }
-  if (confirm("Apakah Anda yakin ingin menghapus laporan helpdesk ini?")) {
+  if (await confirmPromise("Apakah Anda yakin ingin menghapus laporan helpdesk ini?")) {
     await postAction({ action: "deleteHelpdesk", id_tiket: id });
   }
 }
@@ -1257,7 +1258,7 @@ async function deleteHumas(id, ownerName) {
     alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus konten ini.`);
     return;
   }
-  if (confirm("Apakah Anda yakin ingin menghapus konten humas ini?")) {
+  if (await confirmPromise("Apakah Anda yakin ingin menghapus konten humas ini?")) {
     await postAction({ action: "deleteHumas", id_konten: id });
   }
 }
@@ -1317,7 +1318,7 @@ async function deleteBbm(id, ownerName) {
     alert(`Akses Ditolak. Hanya pemilik laporan (${ownerName}) atau Admin yang dapat menghapus permohonan ini.`);
     return;
   }
-  if (confirm("Apakah Anda yakin ingin menghapus permohonan BBM ini?")) {
+  if (await confirmPromise("Apakah Anda yakin ingin menghapus permohonan BBM ini?")) {
     await postAction({ action: "deleteBbm", id_bbm: id });
   }
 }
@@ -1724,7 +1725,7 @@ async function cancelBookingHome(id, ownerName) {
     alert(`Akses Ditolak. Hanya pemilik booking (${ownerName}) atau Admin yang dapat membatalkan booking ini.`);
     return;
   }
-  if (confirm("Apakah Anda yakin ingin membatalkan booking ruang rapat ini?")) {
+  if (await confirmPromise("Apakah Anda yakin ingin membatalkan booking ruang rapat ini?")) {
     await postAction({ action: "cancelBooking", id_booking: id });
   }
 }
@@ -1829,12 +1830,12 @@ document.addEventListener("focusout", e => {
 
 // ── Rapat Actions ───────────────────────────
 async function valBooking(id, status) {
-  if (confirm(`Tentukan status booking ini menjadi ${status}?`)) {
+  if (await confirmPromise(`Tentukan status booking ini menjadi ${status}?`)) {
     await postAction({ action: "validateBooking", id_booking: id, status });
   }
 }
 async function cancelBooking(id) {
-  if (confirm("Apakah Anda yakin ingin membatalkan booking ruangan ini?")) {
+  if (await confirmPromise("Apakah Anda yakin ingin membatalkan booking ruangan ini?")) {
     await postAction({ action: "cancelBooking", id_booking: id });
   }
 }
