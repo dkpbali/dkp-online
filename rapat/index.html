@@ -230,6 +230,12 @@
 .desktop-dropdown-content a.active{color:var(--wave);background-color:var(--ink2)}
 .desktop-dropdown:hover .desktop-dropdown-content{display:block}
 .desktop-dropdown:hover .desktop-dropdown-btn{color:var(--text);background:var(--ink2)}
+
+/* Webkit calendar picker icon dark mode fix */
+html.dark input::-webkit-calendar-picker-indicator {
+  filter: invert(1) !important;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>

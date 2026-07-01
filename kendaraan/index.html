@@ -216,6 +216,12 @@
   display: inline-block;
   margin-bottom: 12px;
 }
+
+/* Webkit calendar picker icon dark mode fix */
+html.dark input::-webkit-calendar-picker-indicator {
+  filter: invert(1) !important;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
