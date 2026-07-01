@@ -1051,23 +1051,23 @@ body.keyboard-open .more-drawer { display: none !important; }
   .desktop-nav-item { font-size: 13px !important; padding: 6px 12px !important; }
 }
 
-/* ── THEME TOGGLE BUTTON ── */
 .theme-toggle-btn {
   background: var(--ink3);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 8px;
-  border-radius: 50%;
+  padding: 6px 12px;
+  border-radius: 20px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   transition: all 0.2s ease;
-  width: 34px;
   height: 34px;
   flex-shrink: 0;
   margin-right: 8px;
   outline: none;
+  user-select: none;
 }
 .theme-toggle-btn:hover {
   background: var(--ink2);
@@ -1075,7 +1075,40 @@ body.keyboard-open .more-drawer { display: none !important; }
 }
 .theme-toggle-btn svg {
   stroke: var(--text);
+  width: 14px;
+  height: 14px;
+}
+.theme-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+}
+.theme-toggle-btn .theme-label::after {
+  content: "Light Mode";
+}
+html.dark .theme-toggle-btn .theme-label::after {
+  content: "Dark Mode";
 }
 .theme-icon-light { display: none !important; }
 html.dark .theme-icon-dark { display: none !important; }
 html.dark .theme-icon-light { display: block !important; }
+
+/* ── GLOBAL DARK MODE HERO & WAVES OVERRIDES ── */
+html.dark .bbm-hero,
+html.dark .module-hero,
+html.dark .ews-hero,
+html.dark .hero {
+  background: rgba(30, 41, 59, 0.45) !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+html.dark .parallax-waves use {
+  fill: rgba(30, 41, 59, 0.2) !important;
+}
+html.dark .parallax-waves use:nth-child(4) {
+  fill: rgba(15, 23, 42, 0.4) !important;
+}
+html.dark .toast.success { background: #064e3b !important; color: #34d399 !important; border-color: rgba(52, 211, 153, 0.2) !important; }
+html.dark .toast.error   { background: #7f1d1d !important; color: #f87171 !important; border-color: rgba(248, 113, 113, 0.2) !important; }
+html.dark .toast.info    { background: #1e3a8a !important; color: #60a5fa !important; border-color: rgba(96, 165, 250, 0.2) !important; }
+html.dark .toast.warning { background: #78350f !important; color: #fbbf24 !important; border-color: rgba(251, 191, 36, 0.2) !important; }

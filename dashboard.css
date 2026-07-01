@@ -5,7 +5,7 @@
 
 /* ── STYLES FROM DASHBOARD/DASHBOARD_KENDARAAN/INDEX.HTML ── */
 .bbm-hero{
-      background:rgba(255,255,255,0.75);
+      background: var(--card);
       backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
       border:1px solid rgba(0,119,230,0.12);
       border-radius:14px;padding:16px 14px;margin-bottom:16px;
@@ -97,7 +97,7 @@
         display: block !important;
         position: sticky;
         top: 72px;
-        background: #fff;
+        background: var(--card);
         border: 1px solid var(--border);
         border-radius: 16px;
         padding: 20px;
@@ -110,7 +110,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       margin-bottom: 10px;
-      background: #fff;
+      background: var(--card);
       overflow: hidden;
       transition: all 0.2s ease;
     }
@@ -178,7 +178,7 @@
     /* Nested vehicle row */
     .nested-vehicle-row {
       padding: 10px 12px;
-      background: #fff;
+      background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
       margin-bottom: 6px;
@@ -375,7 +375,7 @@
 
     /* Bidang Progress Bars */
     .bidang-bars-card{
-      background:rgba(255,255,255,0.75);border:1px solid var(--border);
+      background: var(--card);border:1px solid var(--border);
       border-radius:16px;padding:18px;margin-bottom:24px;
     }
     .bidang-bar-row{margin-bottom:14px;cursor:pointer}
@@ -410,7 +410,7 @@
     }
     .filter-control{
       width:100%;padding:8px 12px;font-size:12px;
-      background:#fff;border:1px solid var(--border);
+      background: var(--card);border:1px solid var(--border);
       border-radius:8px;font-family:var(--sans);color:var(--text);
       font-weight:600;outline:none;
     }
@@ -424,7 +424,7 @@
 
     /* ── INSIGHT CARD (ORIGINAL DESIGN RESTORED) ── */
     .insight-card {
-      background: #ffffff;
+      background: var(--card);
       color: var(--text);
       border-radius: 16px;
       padding: 18px;
@@ -678,7 +678,7 @@
     .nav-dropdown-content {
       display: none;
       position: absolute;
-      background-color: #ffffff;
+      background-color: var(--card);
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
       z-index: 300;
@@ -787,7 +787,7 @@
   border-radius:10px;color:var(--text);font-family:var(--sans);
   font-size:13px;transition:all .2s ease;outline:none;
 }
-.filter-control:focus{border-color:var(--wave);background:#fff}
+.filter-control:focus{border-color:var(--wave);background: var(--card) }
 
 /* Autocomplete Dropdown List */
 .autocomplete-list {
@@ -796,7 +796,7 @@
   left: 0;
   right: 0;
   z-index: 100;
-  background: #ffffff;
+  background: var(--card);
   border: 1.5px solid var(--border);
   border-radius: 10px;
   margin-top: 4px;
@@ -840,14 +840,14 @@
 .table-responsive{overflow-x:auto;margin-top:10px;border-radius:10px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;text-align:left;font-size:12px}
 th{background:var(--ink3);color:var(--text);font-weight:700;padding:12px 14px;font-family:var(--title-sans);text-transform:uppercase;letter-spacing:.03em;font-size:10px}
-td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text);background:#fff}
+td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--text);background: var(--card) }
 tr:last-child td{border-bottom:none}
 .tr-hover:hover td{background:rgba(0,119,230,0.02)}
 .pagination{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:12px}
 
 /* ── UPI LIST & CARDS ── */
 .upi-card{
-  background:#fff;border:1px solid var(--border);
+  background: var(--card);border:1px solid var(--border);
   border-radius:14px;padding:16px;margin-bottom:14px;
   transition:all .2s;
 }
@@ -1288,7 +1288,7 @@ tr:last-child td{border-bottom:none}
 /* ── STYLES FROM DASHBOARD/DASHBOARD_EWS/INDEX.HTML ── */
 /* ── HERO ── */
 .ews-hero{
-  background:rgba(255,255,255,0.75);
+  background: var(--card);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(0,85,170,0.12);
   border-radius:14px;padding:16px 14px;margin-bottom:16px;
@@ -1491,7 +1491,7 @@ tr:last-child td{border-bottom:none}
 
 /* ── SENTIMEN PANEL (glassmorphism donut + cards) ── */
 .sentimen-panel{
-  background:rgba(255,255,255,0.65);
+  background: var(--card);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid rgba(0,85,170,0.1);
   border-radius:18px;padding:20px;margin-bottom:16px;
@@ -1507,7 +1507,7 @@ tr:last-child td{border-bottom:none}
 }
 .donut-ring::after{
   content:'';position:absolute;inset:24%;
-  border-radius:50%;background:#fff;
+  border-radius:50%;background: var(--card);
   box-shadow:0 0 12px rgba(0,0,0,0.04);
 }
 @keyframes donutAppear{from{transform:scale(0.7);opacity:0}to{transform:scale(1);opacity:1}}
@@ -2268,3 +2268,19 @@ body.keyboard-open .more-drawer{display:none !important}
   max-width: 280px;
 }
 
+
+/* ── DARK MODE OVERRIDES ── */
+html.dark .sentimen-panel {
+  background: rgba(30, 41, 59, 0.45) !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+html.dark .donut-ring::after {
+  background: #1e293b !important; /* Slate 800 */
+}
+html.dark .bbm-hero,
+html.dark .module-hero,
+html.dark .ews-hero,
+html.dark .hero {
+  background: rgba(30, 41, 59, 0.45) !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
